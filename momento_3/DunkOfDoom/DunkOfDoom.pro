@@ -10,14 +10,11 @@ CONFIG += c++17
 
 SOURCES += \
     ball.cpp \
-    character.cpp \
     main.cpp \
-    mainwindow.cpp \
-    test_ball.cpp
+    mainwindow.cpp
 
 HEADERS += \
     ball.h \
-    character.h \
     mainwindow.h
 
 FORMS += \
