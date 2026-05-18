@@ -12,12 +12,15 @@ SOURCES += \
     ball.cpp \
     main.cpp \
     mainwindow.cpp \
-    obstacle.cpp
+    obstacle.cpp \
+    trap.cpp
 
 HEADERS += \
     ball.h \
     mainwindow.h \
-    obstacle.h
+    obstacle.h \
+    trap.h \
+    zona.h
 
 FORMS += \
     mainwindow.ui
