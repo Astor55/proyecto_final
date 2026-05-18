@@ -3,7 +3,7 @@
 
 class Character;
 
-class Player;
+class player;
 
 
 enum class ObstacleType : unsigned char
@@ -33,7 +33,7 @@ public:
     Obstacle& operator=(const Obstacle& otro) = delete;
 
     // interfaz publica
-    virtual void aplicar(Player* p) = 0;
+    virtual void aplicar(player* p) = 0;
     virtual void actualizar(float dt) = 0;
 
     // colision AABB simple
