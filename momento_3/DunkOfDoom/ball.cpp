@@ -24,15 +24,6 @@ Ball::Ball(modoBall modo,
 }
 
 
-// |destructor|
-
-Ball::~Ball()
-{
-
-    portador = nullptr;
-
-}
-
 
 // |funcion de lanzamiento del balón|
 void Ball::lanzar(float fuerza, float angulo)
@@ -59,7 +50,7 @@ void Ball::lanzar(float fuerza, float angulo)
 
 
 // |unciones de recoger y soltar el balón|
-void Ball::recoger(Character* c)
+void Ball::recoger(character* c)
 {
 
     if(!c) return;
@@ -262,7 +253,7 @@ void Ball::verificar_colision_paredes(float ancho, float alto)
 
 
 // |colision con Character (el jugador o el enemigo)|
-void Ball::verificar_colision_charater(Character* c)
+void Ball::verificar_colision_charater(character* c)
 {
 
     if(!activa || !c || portador) return;
