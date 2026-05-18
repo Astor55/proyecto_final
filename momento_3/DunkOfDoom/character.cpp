@@ -18,3 +18,35 @@ void character :: modificar_vida(float cantidad){
 
     vida+= cantidad; // Si cantidad es negativa, disminuye la vida, si es positiva, aumenta
 }
+
+
+
+float character :: getx() const{
+
+    return x;
+}
+
+float character :: gety() const{
+
+    return y;
+}
+
+float character :: getvelocidad() const{
+
+    return velocidad;
+}
+
+float character :: getfuerza() const{
+
+    return fuerza;
+}
+
+float character :: getvida() const{
+
+    return vida;
+}
+
+bool character :: getensuelo() const{
+
+    return en_suelo;
+}
