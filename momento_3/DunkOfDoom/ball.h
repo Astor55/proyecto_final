@@ -30,17 +30,17 @@ enum class sprite_ball : unsigned char
 };
 
 
-
+// -------------
+//  clase balón
+// -------------
 class Ball
 {
 
 public:
 
     //fisicas
-
     float x, y;
     float vx, vy;
-
     bool en_suelo;
     bool activa;
 

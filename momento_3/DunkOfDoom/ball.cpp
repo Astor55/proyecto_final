@@ -1,5 +1,4 @@
 #include "ball.h"
-#include "character.h"
 #include <cmath>
 using namespace std;
 
