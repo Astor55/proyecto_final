@@ -10,15 +10,19 @@ CONFIG += c++17
 
 SOURCES += \
     ball.cpp \
+    lava.cpp \
     main.cpp \
     mainwindow.cpp \
     obstacle.cpp \
+    powerup.cpp \
     trap.cpp
 
 HEADERS += \
     ball.h \
+    lava.h \
     mainwindow.h \
     obstacle.h \
+    powerup.h \
     trap.h \
     zona.h
 
