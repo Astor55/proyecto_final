@@ -1,5 +1,5 @@
 #include "trap.h"
-#include <random>
+#include <QRandomGenerator>
 
 using namespace std;
 
@@ -21,13 +21,11 @@ void Trap::reposicionar()
     float rango_x = zona_asignada.x_max - zona_asignada.x_min - ANCHO;
     float rango_y = zona_asignada.y_max - zona_asignada.y_min - ALTO_TRAP;
 
-    static mt19937 motor(random_device{}());
+    x = zona_asignada.x_min +
+    static_cast<float>(QRandomGenerator::global()->generateDouble() * rango_x);
 
-    uniform_real_distribution<float> dist_x(0.0f, rango_x);
-    uniform_real_distribution<float> dist_y(0.0f, rango_y);
-
-    x = zona_asignada.x_min + dist_x(motor);
-    y = zona_asignada.y_min + dist_y(motor);
+    y = zona_asignada.y_min +
+        static_cast<float>(QRandomGenerator::global()->generateDouble() * rango_y);
 
 }
 

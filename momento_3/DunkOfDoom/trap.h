@@ -2,7 +2,6 @@
 #define TRAP_H
 
 #include "obstacle.h"
-#include "player.h"
 #include "zona.h"
 
 class player;
@@ -12,26 +11,26 @@ class Trap : public Obstacle
 
 public:
 
-    Trap();
-
     Trap(const zona& otro);
     ~Trap() override = default;
 
+    // evitar copias
     Trap(const Trap&) = delete;
     Trap& operator=(const Trap& otro) = delete;
 
+    //heredados de obstacle
     void aplicar(player* p) override;
     void actualizar(float dt) override;
 
 private:
 
-    zona zona_asignada;
+    zona zona_asignada; //donde puede reaparecer
 
-    bool activada;
+    bool activada; // true = si fue pisada
 
-    float timer_reactivacion;
+    float timer_reactivacion; // cuenta regresiva
 
-    void reposicionar();
+    void reposicionar(); // posicion aleatoria para reaparecer
 
     static constexpr float ANCHO           = 40.0f;
     static constexpr float ALTO_TRAP       = 20.0f;
