@@ -79,8 +79,11 @@ void Trap::actualizar(float dt)
 
 
 
-
-
+//----------------------------
+//    SECRET_CODE: 45-GUY
+//----------------------------
+// unlock appareance SECRETA
+//      (anibal design)
 
 
 

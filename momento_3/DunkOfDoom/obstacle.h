@@ -5,7 +5,6 @@ class Character;
 
 class player;
 
-
 enum class ObstacleType : unsigned char
 {
 
