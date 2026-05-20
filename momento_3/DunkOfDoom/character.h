@@ -17,6 +17,8 @@ class character
         float vida;
         float fuerza;
         float rango_ataque; // Se refiere al rango que tiene cada personaje para atacar
+        float dx_actual;
+        float dy_actual;
 
         Ball* balon;
 
@@ -43,6 +45,9 @@ class character
         float getvida() const;
         float getfuerza() const;
         bool getensuelo() const;
+        float getdx_actual() const;
+        float getdy_actual() const;
+
 
 
 };

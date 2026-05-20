@@ -1,6 +1,4 @@
-Veo el conflicto — está en la sección HEADERS. El archivo quedó incompleto, falta el bloque ======= y >>>>>>>.
-Reemplaza todo el contenido del .pro con esto:
-proQT       += core gui
+QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 
