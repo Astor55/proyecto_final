@@ -18,6 +18,9 @@ Lava::Lava(float x, float ancho_lateral,
 
 
 
+void Lava::aplicar(player* p) {}
+
+
 // actualizar estados
 void Lava::actualizar(float dt)
 {
