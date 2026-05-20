@@ -1,7 +1,7 @@
-QT       += core gui
-
+Veo el conflicto — está en la sección HEADERS. El archivo quedó incompleto, falta el bloque ======= y >>>>>>>.
+Reemplaza todo el contenido del .pro con esto:
+proQT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -9,19 +9,21 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    enemy.cpp \
     main.cpp \
     mainwindow.cpp \
     ball.cpp \
     player.cpp \
     character.cpp \
+    enemy.cpp \
+    boss.cpp
 
 HEADERS += \
-    enemy.h \
     mainwindow.h \
     ball.h \
     player.h \
     character.h \
+    enemy.h \
+    boss.h
 
 FORMS += \
     mainwindow.ui
