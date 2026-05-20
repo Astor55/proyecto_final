@@ -50,3 +50,13 @@ bool character :: getensuelo() const{
 
     return en_suelo;
 }
+
+float character :: getdx_actual() const{
+
+    return dx_actual;
+}
+
+float character :: getdy_actual() const{
+
+    return dy_actual;
+}

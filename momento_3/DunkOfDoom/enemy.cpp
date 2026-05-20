@@ -92,7 +92,9 @@ void Enemy :: accion(character& jugador, Ball& balon, float canasta_x, float can
 void Enemy :: aprendizaje(){
 
 
-  // El enemigo no tiene nada que aprender, solo tiene que reaccionar a los eventos percibidos
+
+
+
 
 }
 
