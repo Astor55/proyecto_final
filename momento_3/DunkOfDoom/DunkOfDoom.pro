@@ -10,16 +10,16 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
-    ball.cpp
-    player.cpp
-    character.cpp
+    mainwindow.cpp \
+    ball.cpp \
+    player.cpp \
+    character.cpp \
 
 HEADERS += \
-    mainwindow.h
-    ball.h
-    player.h
-    character.h
+    mainwindow.h \
+    ball.h \
+    player.h \
+    character.h \
 
 FORMS += \
     mainwindow.ui
