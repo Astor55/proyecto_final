@@ -6,6 +6,10 @@ using namespace std;
 
 void player :: moverse(float dx, float dy){
 
+    dx_actual = dx;
+
+    dy_actual = dy;
+
     x+= dx * velocidad;
 
     y+= dy * velocidad;
