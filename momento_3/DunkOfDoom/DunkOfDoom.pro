@@ -9,21 +9,25 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ball.cpp \
-    lava.cpp \
-    main.cpp \
+main.cpp \
     mainwindow.cpp \
+    ball.cpp \
+    character.cpp \
+    player.cpp \
     obstacle.cpp \
-    powerup.cpp \
-    trap.cpp
+    trap.cpp \
+    lava.cpp \
+    powerup.cpp
 
 HEADERS += \
-    ball.h \
-    lava.h \
     mainwindow.h \
+    ball.h \
+    character.h \
+    player.h \
     obstacle.h \
-    powerup.h \
     trap.h \
+    lava.h \
+    powerup.h \
     zona.h
 
 FORMS += \
