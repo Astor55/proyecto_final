@@ -1,7 +1,7 @@
 #ifndef BALL_H
 #define BALL_H
 
-class Character; //evita el include
+#include "character.h"
 
 enum class modoBall : unsigned char
 {
@@ -58,7 +58,7 @@ public:
 
     //posesiones
 
-    Character* portador;
+    character* portador;
 
     //contructor, destructor
 
@@ -77,12 +77,12 @@ public:
 
     void actualizar(float Cambio);
     void lanzar(float fuerza, float angulo);
-    void recoger(Character* c);
+    void recoger(character* c);
     void soltar();
 
     // colisiones
     void verificar_colision_paredes(float ancho, float alto);
-    void verificar_colision_charater(Character* c);
+    void verificar_colision_charater(character* c);
 
     // getters
     bool Activa() const

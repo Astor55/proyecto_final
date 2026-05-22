@@ -20,5 +20,11 @@ class player : public character
 
         ~player() override = default; // Confirma que el destructor de la clase padre esta declarado como virtual
 
+        void inmovilizar(float duracion);
 
+        void aplicar_boost_velocidad(float multiplicador, float duracion);
+
+        void activar_flash_verde();
+
+};
 #endif // PLAYER_H
