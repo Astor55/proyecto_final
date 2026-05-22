@@ -1,7 +1,7 @@
 #ifndef BALL_H
 #define BALL_H
 
-#include "character.h"
+class character;
 
 enum class modoBall : unsigned char
 {
@@ -66,7 +66,7 @@ public:
          ComportamientoColision comportamiento = ComportamientoColision::Roto,
          unsigned short rebotes_max = REBOTES_MAX_DEF);
 
-    ~Ball();
+    ~Ball() = default;
 
     // prohibir copia
 
