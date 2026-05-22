@@ -2,6 +2,7 @@
 #define CHARACTER_H
 
 // Clase abstracta
+class Ball;
 
 class character
 {
@@ -15,23 +16,40 @@ class character
         float velocidad;
         float vida;
         float fuerza;
+        float rango_ataque; // Se refiere al rango que tiene cada personaje para atacar
+        float dx_actual;
+        float dy_actual;
+
+        Ball* balon;
 
         bool en_suelo;
 
     public:
 
-        character(float _x, float _y, float _vida, float _fuerza, bool _en_suelo);
+        character(float _x, float _y, float _vida, float _fuerza,float _rango_ataque, bool _en_suelo);
 
         // Metodos
 
-        virtual void moverse() = 0; // Especificador para el compilador que obliga a las clases derivadas a implementarlo
-        virtual void atacar() = 0;
+        virtual void moverse(float dx, float dy) = 0; // Especificador para el compilador que obliga a las clases derivadas a implementarlo
+        virtual void atacar(character& objetivo, Ball& balon) = 0;
 
         void modificar_vida(float cantidad);
         float get_x()const {return x;}
         float get_y()const {return y;}
 
         virtual ~character() = default; // Default, le dice al compilador que genere este metodo automaticamente
+
+        // Getters
+
+        float getx() const;
+        float gety() const;
+        float getvelocidad() const;
+        float getvida() const;
+        float getfuerza() const;
+        bool getensuelo() const;
+        float getdx_actual() const;
+        float getdy_actual() const;
+
 
 
 };

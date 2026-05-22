@@ -1,6 +1,8 @@
 #include "ball.h"
-
+#include "character.h"
 #include <cmath>
+
+
 using namespace std;
 
 // |constructor|
@@ -23,15 +25,6 @@ Ball::Ball(modoBall modo,
     radio = 15.0f;
 }
 
-
-// |destructor|
-
-Ball::~Ball()
-{
-
-    portador = nullptr;
-
-}
 
 
 // |funcion de lanzamiento del balón|
