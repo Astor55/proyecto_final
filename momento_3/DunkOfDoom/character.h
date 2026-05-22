@@ -28,6 +28,8 @@ class character
         virtual void atacar() = 0;
 
         void modificar_vida(float cantidad);
+        float get_x()const {return x;}
+        float get_y()const {return y;}
 
         virtual ~character() = default; // Default, le dice al compilador que genere este metodo automaticamente
 

@@ -1,5 +1,5 @@
 #include "ball.h"
-#include "character_temp.h"
+
 #include <cmath>
 using namespace std;
 
@@ -59,7 +59,7 @@ void Ball::lanzar(float fuerza, float angulo)
 
 
 // |unciones de recoger y soltar el balón|
-void Ball::recoger(Character* c)
+void Ball::recoger(character* c)
 {
 
     if(!c) return;
@@ -96,8 +96,8 @@ void Ball::actualizar(float cambio)
     if(portador)
     {
 
-        x = portador->x + OFFSET_X;
-        y = portador->y + OFFSET_Y;
+        x = portador->get_x() + OFFSET_X;
+        y = portador->get_y() + OFFSET_Y;
         return;
 
     }
@@ -262,13 +262,13 @@ void Ball::verificar_colision_paredes(float ancho, float alto)
 
 
 // |colision con Character (el jugador o el enemigo)|
-void Ball::verificar_colision_charater(Character* c)
+void Ball::verificar_colision_charater(character* c)
 {
 
     if(!activa || !c || portador) return;
 
-    const float dx = x - c->x;
-    const float dy = y - c->y;
+    const float dx = x - c->get_x();
+    const float dy = y - c->get_y();
     const float distancia = sqrt(dx * dx + dy* dy);
 
     if(distancia > Radio_colision) return;

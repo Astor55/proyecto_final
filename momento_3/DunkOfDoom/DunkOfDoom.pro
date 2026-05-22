@@ -37,3 +37,20 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+
+
+win32 {
+    DESTDIR = $$OUT_PWD
+
+    assets.path  = $$DESTDIR/assets
+    assets.files = $$PWD/assets/*
+    INSTALLS += assets
+
+    # Copiar en cada build
+    copyassets.commands = xcopy /E /I /Y \"$$shell_path($$PWD/assets)\" \"$$shell_path($$DESTDIR/assets)\"
+    first.depends = $(first) copyassets
+    export(first.depends)
+    export(copyassets.commands)
+    QMAKE_EXTRA_TARGETS += first copyassets
+}

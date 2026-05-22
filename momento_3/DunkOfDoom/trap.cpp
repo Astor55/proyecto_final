@@ -1,4 +1,5 @@
 #include "trap.h"
+#include "player.h"
 #include <QRandomGenerator>
 
 using namespace std;
