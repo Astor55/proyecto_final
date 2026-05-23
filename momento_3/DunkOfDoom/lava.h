@@ -2,6 +2,7 @@
 #define LAVA_H
 
 #include "obstacle.h"
+#include "config.h"
 
 class player;
 
@@ -52,11 +53,11 @@ private:
 
     bool generar_powerup;
 
-    static constexpr float ANCHO_LATERAL    = 180.0f; // ajustar según escenario
+    static constexpr float ANCHO_LATERAL    = config::NIVEL2::ANCHO_LAVA; // ajustar según escenario
     static constexpr float INTERVALO        = 15.0f;  // cada 15s cae
     static constexpr float DURACION_ACTIVA  = 8.0f;   // dura 8s activa
     static constexpr float VELOCIDAD_CAIDA  = 200.0f; // px/s
-    static constexpr float DAÑO_POR_SEGUNDO = 10.0f;  // daño continuo
+    static constexpr float DAÑO_POR_SEGUNDO = config::NIVEL2::DAÑO_LAVA_SEG;  // daño continuo
 
 };
 

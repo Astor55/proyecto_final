@@ -46,3 +46,32 @@ void player :: lanzar_balon(Ball &balon, float fuerza, float canasta_x, float ca
     balon.lanzar(fuerza_lanzamiento, angulo);
 
 }
+
+
+
+void player::inmovilizar(float duracion)
+{
+
+    inmovilizado = true;
+
+    timer_inmovilizacion = duracion;
+
+}
+
+
+void player::aplicar_boost_velocidad(float multiplicador, float duracion)
+{
+
+    velocidad = velocidad_base * multiplicador;
+
+    boost_timer = duracion;
+
+}
+
+
+void player::activar_flash_verde()
+{
+
+    flash_verde_activo = true;
+
+}
