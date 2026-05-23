@@ -1,6 +1,8 @@
 #ifndef BALL_H
 #define BALL_H
 
+#include "config.h"
+
 class character;
 
 enum class modoBall : unsigned char
@@ -101,10 +103,10 @@ public:
     }
 
     // constantes fisicas igual que en el la tierra
-    static constexpr float Gravedad = 980.0f;
-    static constexpr float Coef_rebote = 0.65f;
+    static constexpr float Gravedad = config::FISICAS::GRAVEDAD;
+    static constexpr float Coef_rebote = config::FISICAS::COEF_REBOTE;
     static constexpr float Perdida_energia = 0.65f;
-    static constexpr float Vel_minima = 20.0f;
+    static constexpr float Vel_minima = config::FISICAS::VEL_MINIMA;
     static constexpr float Radio_colision = 24.0f;
     static constexpr float OFFSET_X = 20.0f;
     static constexpr float OFFSET_Y = 10.0f;

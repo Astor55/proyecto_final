@@ -19,10 +19,15 @@ class character
         float rango_ataque; // Se refiere al rango que tiene cada personaje para atacar
         float dx_actual;
         float dy_actual;
+        float timer_inmovilizacion = 0.0f;
+        float velocidad_base       = 200.0f;
+        float boost_timer          = 0.0f;
 
         Ball* balon;
 
         bool en_suelo;
+        bool inmovilizado = false;
+        bool flash_verde_activo = false;
 
     public:
 

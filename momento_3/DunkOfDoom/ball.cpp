@@ -114,7 +114,7 @@ void Ball::aplicar_gravedad(float cambio)
 
     else
     {
-        vx *= 0.98f;
+        vx *= config::FISICAS::FRICCION;
     }
 
     if(abs(vx) < Vel_minima)
