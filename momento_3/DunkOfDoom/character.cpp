@@ -63,3 +63,13 @@ float character :: getdy_actual() const{
 
     return dy_actual;
 }
+
+void character :: setx(float num){
+
+    x = num;
+}
+
+void character :: sety(float num){
+
+    y = num;
+}

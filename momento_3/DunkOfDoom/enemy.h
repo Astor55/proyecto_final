@@ -3,6 +3,9 @@
 
 #include "character.h"
 
+class Ball;
+
+
 enum Decision : unsigned char
 {
     IDLE,
@@ -21,6 +24,8 @@ class Enemy : public character
     bool balon_en_mano;
     bool balon_con_jugador;
     Decision decision;
+    const float rango_maximo = 90.0f;
+    const float rango_minimo = 30.0f;
 
 
     public:
@@ -39,7 +44,7 @@ class Enemy : public character
         void percepcion(character& jugador, Ball& balon); // Lee el estado del entorno (posición del jugador, balón, etc.)
         void razonamiento(); // Decide qué acción tomar según lo percibido
         void accion(character& jugador, Ball& balon, float canasta_x, float canasta_y); // Ejecuta la decisión (moverse, lanzar, arrebatar)
-        void aprendizaje(); // Ajusta comportamiento según resultados
+        void aprendizaje(unsigned short puntos_player, unsigned short puntos_enemy); // Ajusta comportamiento según resultados
 
         ~Enemy() override = default;
 
