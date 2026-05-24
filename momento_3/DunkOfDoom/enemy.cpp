@@ -2,6 +2,7 @@
 #include "ball.h"
 #include <cmath>
 
+
 using namespace std;
 
 
@@ -90,14 +91,29 @@ void Enemy :: accion(character& jugador, Ball& balon, float canasta_x, float can
 }
 
 
-void Enemy :: aprendizaje(){
+void Enemy :: aprendizaje(unsigned short puntos_player, unsigned short puntos_enemy){
 
 
+    if(puntos_enemy < puntos_player){
 
+        if(rango_ataque < rango_maximo){
 
+            rango_ataque*= 1.1f;
+        }
+        decision = ARREBATAR;
+    }
 
+    else if(puntos_enemy > puntos_player){
 
+        if(rango_ataque > rango_minimo){
+
+            rango_ataque*= 0.9f;
+        }
+
+        decision = LANZAR;
+    }
 }
+
 
 void Enemy :: lanzar_balon(Ball& balon, float canasta_x, float canasta_y){
 
