@@ -27,6 +27,7 @@ namespace config
         static constexpr float INTERVALO_ATAQUE   = 3.0f;
         static constexpr float VEL_PROYECTIL      = 3.0f;
         static constexpr float TELEGRAPH          = 0.5f;
+        static constexpr float DAÑO_LAVA        = 10.0f;
 
     }
 
@@ -41,6 +42,7 @@ namespace config
         static constexpr float INTERVALO_ATAQUE   = 1.5f;
         static constexpr float VEL_PROYECTIL      = 6.0f;
         static constexpr float TELEGRAPH          = 0.1f;
+        static constexpr float DAÑO_LAVA        = 10.0f;
 
     }
 

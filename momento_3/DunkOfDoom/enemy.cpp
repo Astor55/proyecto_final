@@ -14,9 +14,9 @@ void Enemy :: moverse(float dx ,float dy){
 
 void Enemy :: atacar(character& objetivo, Ball& balon){
 
-    float dx = objetivo.getx() - x;
+    float dx = objetivo.get_x() - x;
 
-    float dy = objetivo.gety() - y;
+    float dy = objetivo.get_y() - y;
 
     float distancia = sqrt((dx*dx) + (dy*dy));
 
@@ -28,8 +28,8 @@ void Enemy :: atacar(character& objetivo, Ball& balon){
 
 void Enemy :: percepcion(character& jugador, Ball& balon){
 
-    float dx = jugador.getx() - x;
-    float dy = jugador.gety() - y;
+    float dx = jugador.get_x() - x;
+    float dy = jugador.get_y() - y;
 
     distancia_al_jugador = sqrt((dx*dx) + (dy*dy));
 
@@ -61,8 +61,15 @@ void Enemy :: razonamiento(){
             decision = ARREBATAR;
 
         }
+    }
+
+    else
+    {
+
+        decision = RECOGER;
 
     }
+
 }
 
 void Enemy :: accion(character& jugador, Ball& balon, float canasta_x, float canasta_y){
@@ -70,7 +77,7 @@ void Enemy :: accion(character& jugador, Ball& balon, float canasta_x, float can
 
     if(decision == ALEJARSE){
 
-        moverse(x - jugador.getx(), y - jugador.gety());
+        moverse(x - jugador.get_x(), y - jugador.get_y());
     }
 
     else if(decision == LANZAR){
@@ -90,14 +97,8 @@ void Enemy :: accion(character& jugador, Ball& balon, float canasta_x, float can
 }
 
 
-void Enemy :: aprendizaje(){
+void Enemy :: aprendizaje(){}
 
-
-
-
-
-
-}
 
 void Enemy :: lanzar_balon(Ball& balon, float canasta_x, float canasta_y){
 
