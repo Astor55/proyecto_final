@@ -19,9 +19,9 @@ void player :: moverse(float dx, float dy){
 
 void player :: atacar(character& objetivo, Ball& balon){
 
-    float dx = objetivo.getx() - x;
+    float dx = objetivo.get_x() - x;
 
-    float dy = objetivo.gety() - y;
+    float dy = objetivo.get_y() - y;
 
     float distancia = sqrt((dx*dx) + (dy*dy));
 
