@@ -13,7 +13,7 @@ void Enemy :: moverse(float dx ,float dy){
     y += dy * velocidad;
 }
 
-void Enemy :: atacar(character& objetivo, Ball& balon){
+void Enemy :: quitar(character& objetivo, Ball& balon){
 
     float dx = objetivo.getx() - x;
 
@@ -81,7 +81,7 @@ void Enemy :: accion(character& jugador, Ball& balon, float canasta_x, float can
 
     else if(decision == ARREBATAR){
 
-        atacar(jugador,balon);
+        quitar(jugador,balon);
     }
 
     else if(decision == RECOGER){

@@ -36,7 +36,7 @@ class Enemy : public character
         {}
 
         void moverse(float dx, float dy) override;
-        void atacar(character& objetivo, Ball& balon) override;
+        void quitar(character& objetivo, Ball& balon);
         void lanzar_balon(Ball& balon, float canasta_x, float canasta_y);
 
 

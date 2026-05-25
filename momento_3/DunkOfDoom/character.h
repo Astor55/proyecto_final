@@ -36,7 +36,7 @@ class character
         // Metodos
 
         virtual void moverse(float dx, float dy) = 0; // Especificador para el compilador que obliga a las clases derivadas a implementarlo
-        virtual void atacar(character& objetivo, Ball& balon) = 0;
+        virtual void atacar(character& objetivo, Ball& bal) {}
 
         void modificar_vida(float cantidad);
         float get_x()const {return x;}

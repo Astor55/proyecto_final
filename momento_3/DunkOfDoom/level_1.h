@@ -11,8 +11,8 @@ class Level_1 : public Level
 
     private:
 
-        float puntos_player;
-        float puntos_enemy;
+        unsigned short puntos_player;
+        unsigned short puntos_enemy;
         float tiempo_restante; // El nivel dura 90 segundos pero este atributo es para tener un contador
         float canasta_enemy_x;
         float canasta_enemy_y;
@@ -37,7 +37,8 @@ class Level_1 : public Level
         void sumar_puntos_player();
         void definir_ganador();
 
-        character* getganador();
+        character* getganador() const;
+        float gettiemporestante()const;
 
 };
 
