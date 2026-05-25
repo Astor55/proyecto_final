@@ -2,23 +2,16 @@
 #include "level_1.h"
 #include "config.h"
 
-Level_1 :: Level_1() {
-
-    Level();
-    puntos_enemy = 0;
-    puntos_player = 0;
-    tiempo_restante = 90;
-    enemigo = nullptr;
-    balon = nullptr;
-    ganador = nullptr;
+Level_1 :: Level_1() : Level(), puntos_player(0), puntos_enemy(0), tiempo_restante(config::NIVEL1::DURACION),
+    balon(nullptr),enemigo(nullptr),ganador(nullptr)
+{
 
 }
 
 
+void Level_1 :: actualizar(float dt){
 
-void Level_1 :: actualizar(fload dt){
-
-    if(pausado || terminado) return
+    if(pausado || terminado) return;
 
     tiempo_restante-= dt;
 
@@ -43,9 +36,9 @@ void Level_1 :: actualizar(fload dt){
     sumar_puntos_enemy();
 
 
-    enemigo->percepcion(jugador, balon);
+    enemigo->percepcion(*jugador, *balon);
     enemigo->razonamiento();
-    enemigo->accion(jugador, balon, canasta_player_x, canasta_player_y);
+    enemigo->accion(*jugador, *balon, canasta_player_x, canasta_player_y);
     enemigo->aprendizaje(puntos_player, puntos_enemy);
 }
 
@@ -127,23 +120,49 @@ void Level_1 :: definir_ganador(){
     }
 }
 
+void Level_1 :: finalizar(){
+
+    if(pausado) return;
+
+    puntos_enemy = 0;
+    puntos_player = 0;
+
+    delete enemigo;
+
+    enemigo = nullptr;
+
+    delete balon;
+
+    balon = nullptr;
+
+
+    detener_musica();
+
+}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-character* Level_1 :: getganador(){
+character* Level_1::getganador() const{
 
     return ganador;
 }
 
 
+float Level_1 :: gettiemporestante()const{
+
+    return tiempo_restante;
+}
+
+
+
+Level_1 :: ~Level_1(){
+
+    delete enemigo;
+
+    enemigo = nullptr;
+
+    delete balon;
+
+    balon = nullptr;
+
+}
