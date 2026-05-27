@@ -5,6 +5,17 @@
 #include "enemy.h"
 #include "player.h"
 #include "character.h"
+#include <QGraphicsPixmapItem>
+#include <QPixmap>
+
+
+enum class EstadoAnimacion : unsigned char
+{
+    CAMINANDO_CON_BALON,
+    CORRIENDO_CON_BALON,
+    LANZANDO,
+    CORRIENDO_SIN_BALON
+};
 
 class Level_1 : public Level
 {
@@ -21,6 +32,20 @@ class Level_1 : public Level
         Ball* balon;
         Enemy* enemigo;
         character* ganador;
+
+        // Capa grafica
+
+        QPixmap sheet_jugador;
+        QPixmap sheet_enemigo;
+        QGraphicsPixmapItem* sprite_jugador;
+        QGraphicsPixmapItem* sprite_enemigo;
+        EstadoAnimacion estado_jugador;
+        EstadoAnimacion estado_enemigo;
+        EstadoAnimacion estado_anterior_jugador;
+        int frame_jugador;
+        int frame_enemigo;
+        float timer_frame_jugador;
+        float timer_frame_enemigo;
 
 
     public:

@@ -30,8 +30,8 @@ class Enemy : public character
 
     public:
 
-        Enemy(float _x, float _y, float _vida, float _fuerza,float _rango_ataque, bool _en_suelo)
-            : character(_x, _y, _vida, _fuerza,_rango_ataque, _en_suelo), distancia_al_jugador(0),
+        Enemy(float _x, float _y, float _velocidad,float _vida, float _fuerza,float _rango_ataque, bool _en_suelo)
+            : character(_x, _y, _vida,_velocidad, _fuerza,_rango_ataque, _en_suelo), distancia_al_jugador(0),
             balon_en_mano(false), balon_con_jugador(false), decision(IDLE)
         {}
 

@@ -8,8 +8,8 @@ class player : public character
 
     public:
 
-        player(float _x, float _y, float _vida, float _fuerza,float _rango_ataque, bool _en_suelo)
-            : character(_x, _y, _vida, _fuerza,_rango_ataque, _en_suelo)
+        player(float _x, float _y,float _velocidad,float _vida, float _fuerza,float _rango_ataque, bool _en_suelo)
+            : character(_x, _y,_velocidad, _vida, _fuerza,_rango_ataque, _en_suelo)
         {
         // Implementacion del constructor en el .h debido a lo simple que es
         }
@@ -27,6 +27,8 @@ class player : public character
         void aplicar_boost_velocidad(float multiplicador, float duracion);
 
         void activar_flash_verde();
+
+
 
 };
 #endif // PLAYER_H

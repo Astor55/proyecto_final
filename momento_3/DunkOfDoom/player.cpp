@@ -75,3 +75,4 @@ void player::activar_flash_verde()
     flash_verde_activo = true;
 
 }
+
