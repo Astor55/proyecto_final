@@ -17,8 +17,8 @@ class Boss : public Enemy
 
     public:
 
-        Boss(float _x, float _y, float _vida, float _fuerza,float _rango_ataque, bool _en_suelo, float _velocidad_ataque)
-            : Enemy(_x,_y,_vida,_fuerza,_rango_ataque,_en_suelo), velocidad_ataque(_velocidad_ataque)
+        Boss(float _x, float _y, float _velocidad ,float _vida,float _fuerza,float _rango_ataque, bool _en_suelo, float _velocidad_ataque)
+            : Enemy(_x,_y,_velocidad,_vida,_fuerza,_rango_ataque,_en_suelo), velocidad_ataque(_velocidad_ataque)
             , posicion_predicha_x(0), posicion_predicha_y(0)
 
         {

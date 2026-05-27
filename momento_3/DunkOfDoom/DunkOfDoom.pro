@@ -61,3 +61,6 @@ win32 {
     export(copyassets.commands)
     QMAKE_EXTRA_TARGETS += first copyassets
 }
+
+RESOURCES += \
+    assets.qrc

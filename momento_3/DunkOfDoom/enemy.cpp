@@ -6,11 +6,16 @@
 using namespace std;
 
 
-void Enemy :: moverse(float dx ,float dy){
-
+void Enemy::moverse(float dx, float dy)
+{
     x += dx * velocidad;
-
     y += dy * velocidad;
+
+    // limitar dentro de la pantalla
+    if(x < 0) x = 0;
+    if(x > 1280) x = 1280;
+    if(y < 0) y = 0;
+    if(y > 720) y = 720;
 }
 
 void Enemy :: quitar(character& objetivo, Ball& balon){
@@ -24,7 +29,10 @@ void Enemy :: quitar(character& objetivo, Ball& balon){
     if(distancia <= rango_ataque && balon.portador == &objetivo){
 
         balon.recoger(this);
+
     }
+
+
 }
 
 void Enemy :: percepcion(character& jugador, Ball& balon){
@@ -40,54 +48,54 @@ void Enemy :: percepcion(character& jugador, Ball& balon){
 }
 
 
-void Enemy :: razonamiento(){
-
-    if(balon_en_mano){
-
-        if(distancia_al_jugador <= rango_ataque){
-
+void Enemy::razonamiento()
+{
+    if(balon_en_mano)
+    {
+        if(distancia_al_jugador <= rango_ataque)
             decision = ALEJARSE;
-        }
-
-        else{
-
+        else
             decision = LANZAR;
-        }
     }
-
-    else if(balon_con_jugador){
-
-        if(distancia_al_jugador <= rango_ataque){
-
+    else if(balon_con_jugador)
+    {
+        if(distancia_al_jugador <= rango_ataque)
             decision = ARREBATAR;
-
-        }
-
+        else
+            decision = IDLE; // jugador tiene el balon pero esta lejos
+    }
+    else
+    {
+        decision = RECOGER; // nadie tiene el balon
     }
 }
+void Enemy::accion(character& jugador, Ball& balon, float canasta_x, float canasta_y)
+{
 
-void Enemy :: accion(character& jugador, Ball& balon, float canasta_x, float canasta_y){
+    if(decision == ALEJARSE)
+    {
+        float dx = x - jugador.getx();
+        float dy = y - jugador.gety();
+        float distancia = sqrt(dx*dx + dy*dy);
 
+        if(distancia > 0)
 
-    if(decision == ALEJARSE){
+        {
+            dx /= distancia; // normalizar
+            dy /= distancia;
+        }
 
-        moverse(x - jugador.getx(), y - jugador.gety());
+        moverse(dx, dy);
     }
 
-    else if(decision == LANZAR){
-
+    else if(decision == LANZAR)
         lanzar_balon(balon, canasta_x, canasta_y);
-    }
 
-    else if(decision == ARREBATAR){
+    else if(decision == ARREBATAR)
+        quitar(jugador, balon);
 
-        quitar(jugador,balon);
-    }
-
-    else if(decision == RECOGER){
-
+    else if(decision == RECOGER)
         balon.recoger(this);
-    }
 }
 
 

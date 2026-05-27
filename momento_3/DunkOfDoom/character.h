@@ -31,7 +31,7 @@ class character
 
     public:
 
-        character(float _x, float _y, float _vida, float _fuerza,float _rango_ataque, bool _en_suelo);
+        character(float _x, float _y, float _velocidad,float _vida, float _fuerza,float _rango_ataque, bool _en_suelo);
 
         // Metodos
 
@@ -54,11 +54,14 @@ class character
         bool getensuelo() const;
         float getdx_actual() const;
         float getdy_actual() const;
+        float getrango_ataque() const;
 
         // Setters
 
         void setx(float num);
         void sety(float num);
+        void setdx(float num);
+        void setdy(float num);
 
 
 

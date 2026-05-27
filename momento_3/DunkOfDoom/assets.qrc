@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/player/doom_comportamiento_lvl1.png</file>
+        <file>assets/enemy/demonio_comportamiento_lvl1.png</file>
+    </qresource>
+</RCC>
