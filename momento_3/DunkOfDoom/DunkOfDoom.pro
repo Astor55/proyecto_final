@@ -8,6 +8,7 @@ CONFIG += c++17
 
 SOURCES += \
     level.cpp \
+    level_2.cpp \
     main.cpp \
     mainwindow.cpp \
     ball.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
 HEADERS += \
     config.h \
     level.h \
+    level_2.h \
     mainwindow.h \
     ball.h \
     character.h \
