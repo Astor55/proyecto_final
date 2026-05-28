@@ -47,23 +47,18 @@ public:
     bool activa;
 
     // comportamientos
-
     modoBall modo;
     ComportamientoColision al_colisionar;
     sprite_ball sprite_actual;
 
     // estado de daño
-
     unsigned short rebotes_restantes;
-
     float energia;
 
     //posesiones
-
     character* portador;
 
     //contructor, destructor
-
     Ball(modoBall modo,
          ComportamientoColision comportamiento = ComportamientoColision::Roto,
          unsigned short rebotes_max = REBOTES_MAX_DEF);
@@ -71,12 +66,10 @@ public:
     ~Ball() = default;
 
     // prohibir copia
-
     Ball(const Ball& otro) = delete;
     Ball& operator=(const Ball&) = delete;
 
     // interfaz publica
-
     void actualizar(float Cambio);
     void lanzar(float fuerza, float angulo);
     void recoger(character* c);
@@ -87,20 +80,9 @@ public:
     void verificar_colision_charater(character* c);
 
     // getters
-    bool Activa() const
-    {
-        return activa;
-    }
-
-    bool tiene_portador() const
-    {
-        return portador != nullptr;
-    }
-
-    sprite_ball get_sprite() const
-    {
-        return sprite_actual;
-    }
+    bool Activa() const { return activa; }
+    bool tiene_portador() const { return portador != nullptr; }
+    sprite_ball get_sprite() const { return sprite_actual; }
 
     // constantes fisicas igual que en el la tierra
     static constexpr float Gravedad = config::FISICAS::GRAVEDAD;
@@ -110,10 +92,9 @@ public:
     static constexpr float Radio_colision = 24.0f;
     static constexpr float OFFSET_X = 20.0f;
     static constexpr float OFFSET_Y = 10.0f;
-
     static constexpr unsigned short REBOTES_MAX_DEF = 3;
 
-    float DANIO_PROYECTIL = 25.0f;
+    float DANIO = 25.0f;
 
 private:
 
