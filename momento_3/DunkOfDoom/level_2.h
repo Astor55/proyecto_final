@@ -5,7 +5,6 @@
 #include "lava.h"
 #include "trap.h"
 #include "powerup.h"
-#include "zona.h"
 #include "config.h"
 #include <array>
 #include <vector>
