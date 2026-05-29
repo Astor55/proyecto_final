@@ -276,7 +276,7 @@ void Ball::verificar_colision_charater(character* c)
 
     // el proyectil se daña y desaparce
 
-    c->modificar_vida(-DANIO_PROYECTIL);
+    c->modificar_vida(-DANIO);
     activa = false;
     sprite_actual = sprite_ball::Destruida;
 

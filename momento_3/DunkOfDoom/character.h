@@ -53,7 +53,9 @@ class character
         float getdx_actual() const;
         float getdy_actual() const;
 
-
+        //setters
+        void setx(float nx) { x = nx; }
+        void sety(float ny) { y = ny; }
 
 };
 

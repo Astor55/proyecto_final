@@ -42,7 +42,7 @@ namespace config
         static constexpr float INTERVALO_ATAQUE   = 1.5f;
         static constexpr float VEL_PROYECTIL      = 6.0f;
         static constexpr float TELEGRAPH          = 0.1f;
-        static constexpr float DAÑO_LAVA        = 10.0f;
+        static constexpr float DAÑO_LAVA        = 15.0f;
 
     }
 
@@ -98,7 +98,8 @@ namespace config
 
         static constexpr const char* FONDO_MENU      = "assets/sprites/ui/fondo_logo.png";
         static constexpr const char* LOGO            = "assets/sprites/ui/logo.png";
-        static constexpr const char* BALL_SHEET      = "assets/sprites/ball/ball_doom.png";
+        static constexpr const char* BALL_SHEET      = "assets/sprites/Ball_Doom.png";
+        static constexpr const char* FONDO_NIVEL2    = "assets/sprites/level2.png";
         static constexpr const char* MUSICA_MENU     = "assets/sounds/music/menu.mp3";
         static constexpr const char* MUSICA_NIVEL1   = "assets/sounds/music/level1.mp3";
         static constexpr const char* MUSICA_NIVEL2   = "assets/sounds/music/level2.mp3";
