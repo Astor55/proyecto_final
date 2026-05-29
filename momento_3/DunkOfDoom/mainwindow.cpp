@@ -56,21 +56,13 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event) {
     case Qt::Key_S: tecla_abajo     = false; break;
     }
 }
-
 void MainWindow::game_loop() {
     float dx = 0, dy = 0;
-
 
     if(tecla_derecha)   dx =  1;
     if(tecla_izquierda) dx = -1;
     if(tecla_arriba)    dy = -1;
     if(tecla_abajo)     dy =  1;
-
-    if(dx != 0 || dy != 0)
-    {
-        jugador->guardar_posicion_anterior();
-        jugador->moverse(dx, dy);
-    }
 
     // Normalizar diagonal
     if(dx != 0 && dy != 0) {
@@ -78,13 +70,16 @@ void MainWindow::game_loop() {
         dy *= 0.707f;
     }
 
+    // Guardar posición y mover — solo una vez
     if(dx != 0 || dy != 0)
+    {
         jugador->moverse(dx, dy);
+    }
 
     nivel->actualizar(config::DELTA_TIME);
     rect_jugador->setPos(jugador->get_x(), jugador->get_y());
 
-    // ← temporal para debug
+    // Debug — ver posición cuando intentas cruzar al puente
     qDebug() << "x:" << jugador->get_x()
              << "y:" << jugador->get_y();
 }

@@ -9,7 +9,6 @@
 #include <array>
 #include <vector>
 #include <QGraphicsPixmapItem>
-#include <QRectF>
 
 using namespace std;
 
@@ -82,19 +81,42 @@ private:
     static constexpr float DESFASE_LAVA     = 7.5f;
     static constexpr unsigned short MAX_PROYECTILES = 6;
 
-    // Límites aproximados zona oscura completa
-    /*
-    static constexpr float LIMITE_IZQ   = 170.0f;
-    static constexpr float LIMITE_DER   = 1100.0f;
-    static constexpr float LIMITE_ARR   = 285.0f;
-    static constexpr float LIMITE_ABA   = 700.0f;
-    */
+    //limites o zonas validas
+    bool en_zona_valida(float px, float py) const;
 
-    // plataformas válidas del mapa
-    QVector<QRectF> plataformas;
+    //constantes para la zona
+    //centro
+    static constexpr float C_IZQ  = 446.0f;
+    static constexpr float C_DER  = 803.0f;
+    static constexpr float C_ARR  = 301.0f;
+    static constexpr float C_ABA  = 568.0f;
 
-    // inicialización de plataformas
-    void inicializar_plataformas();
+    //plataforma izquierda
+    static constexpr float PI_IZQ = 229.0f;
+    static constexpr float PI_DER = 332.0f;
+    static constexpr float PI_ARR = 302.0f;
+    static constexpr float PI_ABA = 559.0f;
+
+    //plataforma derecha
+    static constexpr float PD_IZQ = 916.0f;
+    static constexpr float PD_DER = 1023.0f;
+    static constexpr float PD_ARR = 303.0f;
+    static constexpr float PD_ABA = 566.0f;
+
+    //puente izquierdo
+    static constexpr float PUI_IZQ = 332.0f;
+    static constexpr float PUI_DER = 446.0f;
+    static constexpr float PUI_ARR = 392.0f;
+    static constexpr float PUI_ABA = 436.0f;
+
+    //puente derecho
+    static constexpr float PUD_IZQ = 803.0f;
+    static constexpr float PUD_DER = 916.0f;
+    static constexpr float PUD_ARR = 393.0f;
+    static constexpr float PUD_ABA = 436.0f;
+
+    float ultima_x_valida = 640.0f;
+    float ultima_y_valida = 430.0f;
 
 };
 

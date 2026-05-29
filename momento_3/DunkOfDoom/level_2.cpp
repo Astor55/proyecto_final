@@ -124,50 +124,52 @@ void Level_2::inicializacion(player* p, QGraphicsScene* escena)
 
     iniciar_musica(config::Assets::MUSICA_NIVEL2);
 
-    inicializar_plataformas();
-
 }
 
 
-void Level_2::inicializar_plataformas()
+//validar limites o zonas permitidas de movimiento para el jugador
+bool Level_2::en_zona_valida(float px, float py) const
 {
 
-    plataformas.clear();
+    //plataforma central
+    if(px >= C_IZQ && px <= C_DER &&
+        py >= C_ARR && py <= C_ABA)
+        return true;
 
-    plataformas.push_back(QRectF(
-        446.0f,
-        301.0f,
-        357.0f,
-        267.0f
-        ));
+    //plataforma izquierda
+    if(px >= PI_IZQ && px <= PI_DER &&
+        py >= PI_ARR && py <= PI_ABA)
+        return true;
 
-    plataformas.push_back(QRectF(
-        837.0f,
-        393.0f,
-        46.0f,
-        43.0f
-        ));
+    // Plataforma derecha
+    if(px >= PD_IZQ && px <= PD_DER &&
+        py >= PD_ARR && py <= PD_ABA)
+        return true;
 
-    plataformas.push_back(QRectF(
-        917.0f,
-        303.0f,
-        106.0f,
-        263.0f
-        ));
+    // Puente izquierdo
+    if(px >= PUI_IZQ && px <= PUI_DER &&
+        py >= PUI_ARR && py <= PUI_ABA)
+        return true;
 
-    plataformas.push_back(QRectF(
-        370.0f,
-        393.0f,
-        43.0f,
-        43.0f
-        ));
+    // Puente derecho
+    if(px >= PUD_IZQ && px <= PUD_DER &&
+        py >= PUD_ARR && py <= PUD_ABA)
+        return true;
 
-    plataformas.push_back(QRectF(
-        230.0f,
-        303.0f,
-        103.0f,
-        256.0f
-        ));
+    return false;
+
+
+    // Temporal — debug de zonas
+    float dbg_x = jugador->get_x();
+    float dbg_y = jugador->get_y();
+
+    qDebug() << "pos:" << dbg_x << dbg_y;
+    qDebug() << "zona valida:" << en_zona_valida(dbg_x, dbg_y);
+    qDebug() << "central:" << (dbg_x >= C_IZQ && dbg_x <= C_DER && dbg_y >= C_ARR && dbg_y <= C_ABA);
+    qDebug() << "puente der:" << (dbg_x >= PUD_IZQ && dbg_x <= PUD_DER && dbg_y >= PUD_ARR && dbg_y <= PUD_ABA);
+    qDebug() << "plat der:" << (dbg_x >= PD_IZQ && dbg_x <= PD_DER && dbg_y >= PD_ARR && dbg_y <= PD_ABA);
+    qDebug() << "puente izq:" << (dbg_x >= PUI_IZQ && dbg_x <= PUI_DER && dbg_y >= PUI_ARR && dbg_y <= PUI_ABA);
+    qDebug() << "plat izq:" << (dbg_x >= PI_IZQ && dbg_x <= PI_DER && dbg_y >= PI_ARR && dbg_y <= PI_ABA);
 
 }
 
@@ -275,28 +277,22 @@ void Level_2::verificar_colisiones()
     const float py = jugador->get_y();
     const float pr = 24.0f;
 
-    QRectF hitboxJugador(
-        px - pr,
-        py - pr,
-        pr * 2.0f,
-        pr * 2.0f
-        );
-
-    bool enPlataforma = false;
-
-    for(const QRectF& plataforma : plataformas)
+    if(!en_zona_valida(jugador->get_x(), jugador->get_y()))
     {
-        if(plataforma.contains(hitboxJugador))
-        {
-            enPlataforma = true;
-            break;
-        }
+
+        //revertir a ultima posicion valida
+        jugador->setx(ultima_x_valida);
+        jugador->sety(ultima_y_valida);
+
     }
 
-    if(!enPlataforma)
+    //guardar ultima pos valida
+    if(en_zona_valida(jugador->get_x(), jugador->get_y()))
     {
-        jugador->setx(jugador->get_x_anterior());
-        jugador->sety(jugador->get_y_anterior());
+
+        ultima_x_valida = jugador->get_x();
+        ultima_y_valida = jugador->get_y();
+
     }
 
     //proyectiles vs jugador
