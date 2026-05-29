@@ -7,8 +7,6 @@ using namespace std;
 
 void player :: moverse(float dx, float dy){
 
-    guardar_posicion_anterior();
-
     dx_actual = dx;
 
     dy_actual = dy;
@@ -77,12 +75,4 @@ void player::activar_flash_verde()
 
     flash_verde_activo = true;
 
-}
-
-
-
-void player::guardar_posicion_anterior()
-{
-    x_anterior = x;
-    y_anterior = y;
 }
