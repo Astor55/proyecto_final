@@ -28,5 +28,16 @@ class player : public character
 
         void activar_flash_verde();
 
+        void guardar_posicion_anterior();
+
+        float get_x_anterior() const { return x_anterior; }
+
+        float get_y_anterior() const { return y_anterior; }
+
+    private:
+
+        float x_anterior;
+        float y_anterior;
+
 };
 #endif // PLAYER_H

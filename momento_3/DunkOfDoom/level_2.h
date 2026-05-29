@@ -8,6 +8,8 @@
 #include "config.h"
 #include <array>
 #include <vector>
+#include <QGraphicsPixmapItem>
+#include <QRectF>
 
 using namespace std;
 
@@ -59,7 +61,7 @@ private:
     float vida_jugador;
     float daño_proyectil;
     float vel_ataque_boss;
-    float curaion_powerup;
+    float curacion_powerup;
 
     //metodos privados de la clase
     void inicializar_lavas();
@@ -79,6 +81,20 @@ private:
     static constexpr float X_LAVA_DER       = ANCHO_PLATAFORMA - ANCHO_LAVA;
     static constexpr float DESFASE_LAVA     = 7.5f;
     static constexpr unsigned short MAX_PROYECTILES = 6;
+
+    // Límites aproximados zona oscura completa
+    /*
+    static constexpr float LIMITE_IZQ   = 170.0f;
+    static constexpr float LIMITE_DER   = 1100.0f;
+    static constexpr float LIMITE_ARR   = 285.0f;
+    static constexpr float LIMITE_ABA   = 700.0f;
+    */
+
+    // plataformas válidas del mapa
+    QVector<QRectF> plataformas;
+
+    // inicialización de plataformas
+    void inicializar_plataformas();
 
 };
 
