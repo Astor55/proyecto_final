@@ -52,6 +52,7 @@ class character
         bool getensuelo() const;
         float getdx_actual() const;
         float getdy_actual() const;
+        float get_inmovilizado() const { return inmovilizado; }
 
         //setters
         void setx(float nx) { x = nx; }
