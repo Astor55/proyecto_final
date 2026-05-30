@@ -17,6 +17,7 @@ SOURCES += \
     enemy.cpp \
     boss.cpp \
     obstacle.cpp \
+    player_sprites.cpp \
     trap.cpp \
     lava.cpp \
     powerup.cpp
@@ -32,6 +33,7 @@ HEADERS += \
     enemy.h \
     boss.h \
     obstacle.h \
+    player_sprites.h \
     trap.h \
     lava.h \
     powerup.h \

@@ -8,6 +8,7 @@
 #include <QGraphicsScene>
 #include "level_2.h"
 #include "player.h"
+#include "player_sprites.h"
 #include <QGraphicsRectItem>
 
 QT_BEGIN_NAMESPACE
@@ -35,6 +36,7 @@ private:
     Level_2*  nivel;
     player*   jugador;
     QGraphicsRectItem* rect_jugador;
+    //PlayerSprites* sprite_jugador = nullptr;
 
     bool tecla_derecha   = false;
     bool tecla_izquierda = false;

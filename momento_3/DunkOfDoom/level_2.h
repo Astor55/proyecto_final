@@ -3,6 +3,7 @@
 
 #include "level.h"
 #include "lava.h"
+#include "player_sprites.h"
 #include "trap.h"
 #include "powerup.h"
 #include "config.h"
@@ -36,6 +37,9 @@ public:
 
     //El jugador sobrevivió hasta el final?
     bool jugador_sobrevivio() const { return sobrevivio; }
+
+    //sprite del player
+    PlayerSprites* sprite_jugador = nullptr;
 
 private:
 
@@ -86,33 +90,33 @@ private:
 
     //constantes para la zona
     //centro
-    static constexpr float C_IZQ  = 446.0f;
-    static constexpr float C_DER  = 803.0f;
-    static constexpr float C_ARR  = 301.0f;
+    static constexpr float C_IZQ  = 455.0f;
+    static constexpr float C_DER  = 809.0f;
+    static constexpr float C_ARR  = 295.0f;
     static constexpr float C_ABA  = 568.0f;
 
     //plataforma izquierda
-    static constexpr float PI_IZQ = 229.0f;
-    static constexpr float PI_DER = 332.0f;
+    static constexpr float PI_IZQ = 244.0f;
+    static constexpr float PI_DER = 349.0f;
     static constexpr float PI_ARR = 302.0f;
     static constexpr float PI_ABA = 559.0f;
 
     //plataforma derecha
-    static constexpr float PD_IZQ = 916.0f;
+    static constexpr float PD_IZQ = 932.0f;
     static constexpr float PD_DER = 1023.0f;
     static constexpr float PD_ARR = 303.0f;
     static constexpr float PD_ABA = 566.0f;
 
     //puente izquierdo
     static constexpr float PUI_IZQ = 332.0f;
-    static constexpr float PUI_DER = 446.0f;
-    static constexpr float PUI_ARR = 392.0f;
+    static constexpr float PUI_DER = 455.0f;
+    static constexpr float PUI_ARR = 382.0f;
     static constexpr float PUI_ABA = 436.0f;
 
     //puente derecho
     static constexpr float PUD_IZQ = 803.0f;
-    static constexpr float PUD_DER = 916.0f;
-    static constexpr float PUD_ARR = 393.0f;
+    static constexpr float PUD_DER = 932.0f;
+    static constexpr float PUD_ARR = 384.0f;
     static constexpr float PUD_ABA = 436.0f;
 
     float ultima_x_valida = 640.0f;

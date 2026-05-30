@@ -96,17 +96,27 @@ namespace config
     namespace Assets
     {
 
+        //juego
         static constexpr const char* FONDO_MENU      = "assets/sprites/ui/fondo_logo.png";
         static constexpr const char* LOGO            = "assets/sprites/ui/logo.png";
-        static constexpr const char* BALL_SHEET      = "assets/sprites/Ball_Doom.png";
-        static constexpr const char* FONDO_NIVEL2    = "assets/sprites/level2.png";
         static constexpr const char* MUSICA_MENU     = "assets/sounds/music/menu.mp3";
-        static constexpr const char* MUSICA_NIVEL1   = "assets/sounds/music/level1.mp3";
-        static constexpr const char* MUSICA_NIVEL2   = "assets/sounds/music/level2.mp3";
+
+        //level 1 y 2
+        static constexpr const char* BALL_SHEET      = "assets/sprites/Ball_Doom.png";
         static constexpr const char* SFX_BOUNCE      = "assets/sounds/sfx/bounce.wav";
-        static constexpr const char* SFX_SCORE       = "assets/sounds/sfx/score.wav";
         static constexpr const char* SFX_HIT         = "assets/sounds/sfx/hit.wav";
+
+        //level_2
+        static constexpr const char* FONDO_NIVEL2    = "assets/sprites/level2.png";
+        static constexpr const char* MUSICA_NIVEL2   = "assets/sounds/music/level2.mp3";
         static constexpr const char* SFX_POWERUP     = "assets/sounds/sfx/powerup.wav";
+        static constexpr const char* PLAYER_SHEET_2  = "assets/player/doom_comportamiento_level2.png";
+        static constexpr const char* PLAYER_SHEET_T  = "assets/player/trap_player.png";
+
+        //level_1
+        static constexpr const char* SFX_SCORE       = "assets/sounds/sfx/score.wav";
+        static constexpr const char* MUSICA_NIVEL1   = "assets/sounds/music/level1.mp3";
+        static constexpr const char* PLAYER_SHEET_1  = "assets/player/doom_comportamiento_lvl1.png";
 
     }
 }

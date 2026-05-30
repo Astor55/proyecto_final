@@ -23,10 +23,6 @@ MainWindow::MainWindow(QWidget *parent)
     nivel   = new Level_2(false);
     nivel->inicializacion(jugador, escena);
 
-    rect_jugador = escena->addRect(0, 0, 30, 30, QPen(Qt::green), QBrush(Qt::green));
-
-    rect_jugador->setPos(jugador->get_x(), jugador->get_y());
-
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::game_loop);
     timer->start(1000 / 60);
@@ -76,10 +72,10 @@ void MainWindow::game_loop() {
         jugador->moverse(dx, dy);
     }
 
-    nivel->actualizar(config::DELTA_TIME);
-    rect_jugador->setPos(jugador->get_x(), jugador->get_y());
+    if(dx == 0 && dy == 0) {
+        jugador->resetear_direccion();
+    }
 
-    // Debug — ver posición cuando intentas cruzar al puente
-    qDebug() << "x:" << jugador->get_x()
-             << "y:" << jugador->get_y();
+    nivel->actualizar(config::DELTA_TIME);
+
 }

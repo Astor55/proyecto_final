@@ -107,6 +107,9 @@ void Level_2::inicializacion(player* p, QGraphicsScene* escena)
     QGraphicsPixmapItem* bg = escena->addPixmap(fondo);
     bg->setZValue(-1);
 
+    sprite_jugador = new PlayerSprites(escena, 0.4f);
+    sprite_jugador->set_pos(jugador->get_x(), jugador->get_y());
+
     //configurar vida del jugador según dificultad
     jugador->modificar_vida(vida_jugador - jugador->getvida());
 
@@ -158,19 +161,6 @@ bool Level_2::en_zona_valida(float px, float py) const
 
     return false;
 
-
-    // Temporal — debug de zonas
-    float dbg_x = jugador->get_x();
-    float dbg_y = jugador->get_y();
-
-    qDebug() << "pos:" << dbg_x << dbg_y;
-    qDebug() << "zona valida:" << en_zona_valida(dbg_x, dbg_y);
-    qDebug() << "central:" << (dbg_x >= C_IZQ && dbg_x <= C_DER && dbg_y >= C_ARR && dbg_y <= C_ABA);
-    qDebug() << "puente der:" << (dbg_x >= PUD_IZQ && dbg_x <= PUD_DER && dbg_y >= PUD_ARR && dbg_y <= PUD_ABA);
-    qDebug() << "plat der:" << (dbg_x >= PD_IZQ && dbg_x <= PD_DER && dbg_y >= PD_ARR && dbg_y <= PD_ABA);
-    qDebug() << "puente izq:" << (dbg_x >= PUI_IZQ && dbg_x <= PUI_DER && dbg_y >= PUI_ARR && dbg_y <= PUI_ABA);
-    qDebug() << "plat izq:" << (dbg_x >= PI_IZQ && dbg_x <= PI_DER && dbg_y >= PI_ARR && dbg_y <= PI_ABA);
-
 }
 
 
@@ -217,6 +207,14 @@ void Level_2::actualizar(float dt)
                                : config::FACIL::INTERVALO_ATAQUE;
 
     }
+
+    sprite_jugador->actualizar(dt,
+                               jugador->getdx_actual(),
+                               jugador->getdy_actual(),
+                               jugador->get_inmovilizado()
+                               );
+    sprite_jugador->set_pos(jugador->get_x(), jugador->get_y());
+
 }
 
 
