@@ -33,7 +33,7 @@ void Ball::lanzar(float fuerza, float angulo)
 
     vx = fuerza * cos(angulo);
 
-    vy = -(fuerza * sin(angulo));
+    vy = (fuerza * sin(angulo));
 
     activa = true;
 
@@ -195,58 +195,30 @@ void Ball::aplicar_rebote_proyectil()
 void Ball::verificar_colision_paredes(float ancho, float alto)
 {
 
-    static constexpr float RADIO = 15.0f; // mitad del círculo 30px
+    // limites reales del area jugable (dentro de los bordes decorativos)
+    static constexpr float BORDE_IZQ  = 50.0f;
+    static constexpr float BORDE_DER  = 1230.0f;
+    static constexpr float BORDE_ARR  = 30.0f;
+    static constexpr float BORDE_ABA  = 630.0f;
 
-    if (modo == modoBall::basketball)
-    {
-        if (x <= RADIO)
-        {
-            x = RADIO;
-            vx =  std::abs(vx) * Coef_rebote;
-        }
-
-        if (x >= ancho - RADIO)
-        {
-            x = ancho - RADIO; vx = -std::abs(vx) * Coef_rebote;
-        }
-
-        if (y >= alto - RADIO)
-        {
-            y = alto - RADIO;
-
-            en_suelo = true;
-
-            rebotar_suelo();
-        }
-
-        return;
-    }
-
+    // modo Roto
     if(al_colisionar == ComportamientoColision::Roto)
     {
-
-        if(x <= 0.0f || x >= ancho ||
-            y <= 0.0f || y >= alto)
+        if(x <= BORDE_IZQ || x >= BORDE_DER ||
+            y <= BORDE_ARR || y >= BORDE_ABA)
         {
-
             activa = false;
-
             sprite_actual = sprite_ball::Destruida;
-
         }
-
         return;
-
     }
 
-    // modo rebote del proyectil
-
+    // modo rebote
     bool colisiono = false;
-
-    if (x <= 0.0f)  { x = 0.0f;  vx =  std::abs(vx); colisiono = true; }
-    if (x >= ancho) { x = ancho; vx = -std::abs(vx);  colisiono = true; }
-    if (y <= 0.0f)  { y = 0.0f;  vy =  std::abs(vy);  colisiono = true; }
-    if (y >= alto)  { y = alto;  vy = -std::abs(vy);   colisiono = true; }
+    if(x <= BORDE_IZQ)  { x = BORDE_IZQ;  vx =  std::abs(vx); colisiono = true; }
+    if(x >= BORDE_DER)  { x = BORDE_DER;  vx = -std::abs(vx); colisiono = true; }
+    if(y <= BORDE_ARR)  { y = BORDE_ARR;  vy =  std::abs(vy);  colisiono = true; }
+    if(y >= BORDE_ABA)  { y = BORDE_ABA;  vy = -std::abs(vy);  colisiono = true; }
 
     if(colisiono) aplicar_rebote_proyectil();
 

@@ -87,7 +87,7 @@ public:
     // constantes fisicas igual que en el la tierra
     static constexpr float Gravedad = config::FISICAS::GRAVEDAD;
     static constexpr float Coef_rebote = config::FISICAS::COEF_REBOTE;
-    static constexpr float Perdida_energia = 0.65f;
+    static constexpr float Perdida_energia = 0.9f;
     static constexpr float Vel_minima = config::FISICAS::VEL_MINIMA;
     static constexpr float Radio_colision = 24.0f;
     static constexpr float OFFSET_X = 20.0f;

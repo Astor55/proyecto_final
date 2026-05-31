@@ -5,6 +5,7 @@
 #include "lava.h"
 #include "player_sprites.h"
 #include "boss_sprites.h"
+#include "ballsprites.h"
 #include "trap.h"
 #include "powerup.h"
 #include "config.h"
@@ -42,6 +43,7 @@ public:
     //sprite del player
     PlayerSprites* sprite_jugador = nullptr;
     BossSprites * sprite_boss = nullptr;
+    std::vector<BallSprites*> sprites_proyectiles;
 
 private:
 
