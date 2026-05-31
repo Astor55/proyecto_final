@@ -194,24 +194,29 @@ void Level_2::actualizar(float dt)
     {
 
         sprite_boss->set_Estado(EstadoBoss::Disparando);
-
-        //float dx = jugador->get_x() - jefe->get_x();
-        //float dy = jugador->get_y() - jefe->get_y();
-        sprite_boss->set_Estado(EstadoBoss::Disparando);
         sprite_boss->set_flip(jugador->get_x() > jefe->get_x());
 
         //predecir posicion del jugador
-        jefe->calcular_posible_nueva_posicion(*jugador);
+        jefe->calcular_posicion_jugador(*jugador);
+
+        qDebug() << "jugador pos:" << jugador->get_x() << jugador->get_y();
+        qDebug() << "boss pos:" << jefe->get_x() << jefe->get_y();
 
         //crear nuevo proyectil
-        Ball* p = new Ball(modoBall::projectile,
-                           ComportamientoColision::Rebote, 3);
 
-        p->DANIO = daño_proyectil;
-        p->x = jefe->get_x();
-        p->y = jefe->get_y();
-        jefe->lanzar_proyectil(*p);
-        proyectiles.push_back(p);
+        Ball* proyectil = new Ball(modoBall::projectile, ComportamientoColision::Rebote, 3);
+
+        proyectil->DANIO = daño_proyectil;
+        proyectil->x = jefe->get_x();
+        proyectil->y = jefe->get_y();
+        jefe->lanzar_proyectil(*proyectil);
+
+        qDebug() << "proyectil lanzado vx:" << proyectil->vx << "vy:" << proyectil->vy;
+
+        proyectiles.push_back(proyectil);
+
+        BallSprites* BS = new BallSprites(escena, 0.3f);
+        sprites_proyectiles.push_back(BS);
 
         //resetear timer según dificultad
         timer_ataque = dificil ? config::DIFICIL::INTERVALO_ATAQUE
@@ -224,6 +229,12 @@ void Level_2::actualizar(float dt)
 
     else
         sprite_boss->set_Estado(EstadoBoss::idle);
+
+    actualizar_proyectiles(dt);
+    limpiar_proyectiles_inactivos();
+
+    for(size_t i = 0; i < proyectiles.size(); i++)
+        sprites_proyectiles[i]->actualizar(*proyectiles[i], dt);
 
     sprite_boss->set_flip(jugador->get_x() > jefe->get_x());
 
@@ -410,26 +421,22 @@ void Level_2::generar_powerup(unsigned short indice_lava)
 void Level_2::limpiar_proyectiles_inactivos()
 {
 
-    for(auto it = proyectiles.begin(); it != proyectiles.end();)
+    size_t i = 0;
+    while(i < proyectiles.size())
     {
 
-        Ball* p = *it;
-
-        if(!p->Activa())
+        if(!proyectiles[i]->Activa() && sprites_proyectiles[i]->lista_para_limpiar())
         {
 
-            delete p;
+            if(sprites_proyectiles[i]->get_item() && sprites_proyectiles[i]->get_item()->scene())
+                sprites_proyectiles[i]->get_item()->scene()->removeItem(sprites_proyectiles[i]->get_item());
 
-            it = proyectiles.erase(it);
-
+            delete proyectiles[i];
+            proyectiles.erase(proyectiles.begin() + i);
+            delete sprites_proyectiles[i];
+            sprites_proyectiles.erase(sprites_proyectiles.begin() + i);
         }
-
-        else
-        {
-
-            ++it;
-
-        }
+        else ++i;
     }
 }
 
@@ -455,6 +462,9 @@ void Level_2::finalizar()
         delete sprite_boss;
         sprite_boss = nullptr;
     }
+
+    for(BallSprites* BS : sprites_proyectiles) delete BS;
+    sprites_proyectiles.clear();
 
     delete jefe;
     jefe = nullptr;

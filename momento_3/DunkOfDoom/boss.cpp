@@ -2,6 +2,7 @@
 #include <cmath>
 #include "ball.h"
 #include <QRandomGenerator>
+#include <QDebug>
 
 
 using namespace std;
@@ -35,4 +36,8 @@ void Boss :: lanzar_proyectil(Ball& balon){
     float angulo = atan2(dy,dx);
 
     balon.lanzar(velocidad_ataque, angulo);
+
+    qDebug() << "predicha x:" << posicion_predicha_x << "predicha y:" << posicion_predicha_y;
+    qDebug() << "angulo:" << angulo << "vx:" << balon.vx << "vy:" << balon.vy;
+
 }
