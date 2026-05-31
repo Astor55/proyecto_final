@@ -41,6 +41,8 @@ public:
 
     void set_visible(bool v);
 
+    QGraphicsPixmapItem* get_item() const { return item; }
+
 
 private:
 
@@ -49,21 +51,14 @@ private:
     std::vector<QPixmap> sheet_trampa;      // trap_player.png
 
     // Dimensiones de cada frame
-    //static constexpr int COLS_PRINCIPAL  = 8;
     static constexpr int FILAS_PRINCIPAL = 5;
     static constexpr int COLS_PRINCIPAL  = 11;
 
     // frame width
     static constexpr int FILA_COL_X[11] = {0, 154, 308, 463, 617, 771, 926, 1080, 1234, 1389, 1543};
-    //static constexpr int FW_PRINCIPAL    = 192;
-    //static constexpr int FILA_COL_X[8] = {132, 297, 461, 629, 795, 960, 1122, 1284};
-    //static constexpr int FW_PRINCIPAL = 85; // ancho real de cada frame
     static constexpr int FW_PRINCIPAL    = 154;
 
     // frame height
-    //static constexpr int FH_PRINCIPAL    = 204;
-    //static constexpr int FILA_Y[5]  = {71,  265, 459, 638, 828};
-    //static constexpr int FILA_H[5]  = {136, 132, 132, 134, 137};
     static constexpr int FILA_Y[5]  = {14,  197, 392, 576, 754};
     static constexpr int FILA_H[5]  = {169, 170, 161, 167, 171};
 

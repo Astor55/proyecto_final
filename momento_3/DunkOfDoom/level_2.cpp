@@ -115,12 +115,15 @@ void Level_2::inicializacion(player* p, QGraphicsScene* escena)
 
     //crear boss centrado arriba (fijo)
     jefe = new Boss(ANCHO_PLATAFORMA / 2.0F, // x centrado
-                    80.0f,  //Y arriba
+                    150.0f,  //Y arriba
                     300.0f, //vida
                     100.0f, //fuerza
                     500.0f, //rango ataque
                     false,  //en_suelo
                     vel_ataque_boss);   //velociadd_ataque
+
+    sprite_boss = new BossSprites(escena, 0.4f);
+    sprite_boss->set_pos(jefe->get_x(), jefe->get_y());
 
     inicializar_lavas();
     inicializar_trampas();
@@ -189,6 +192,14 @@ void Level_2::actualizar(float dt)
 
     if(timer_ataque <= 0.0f && proyectiles.size() < MAX_PROYECTILES)
     {
+
+        sprite_boss->set_Estado(EstadoBoss::Disparando);
+
+        //float dx = jugador->get_x() - jefe->get_x();
+        //float dy = jugador->get_y() - jefe->get_y();
+        sprite_boss->set_Estado(EstadoBoss::Disparando);
+        sprite_boss->set_flip(jugador->get_x() > jefe->get_x());
+
         //predecir posicion del jugador
         jefe->calcular_posible_nueva_posicion(*jugador);
 
@@ -207,6 +218,14 @@ void Level_2::actualizar(float dt)
                                : config::FACIL::INTERVALO_ATAQUE;
 
     }
+
+    else if(timer_ataque <= 1.5f)
+        sprite_boss->set_Estado(EstadoBoss::Cargando);
+
+    else
+        sprite_boss->set_Estado(EstadoBoss::idle);
+
+    sprite_boss->set_flip(jugador->get_x() > jefe->get_x());
 
     sprite_jugador->actualizar(dt,
                                jugador->getdx_actual(),
@@ -420,6 +439,22 @@ void Level_2::finalizar()
 {
 
     detener_musica();
+
+    if(sprite_jugador)
+    {
+        if(sprite_jugador->get_item() && sprite_jugador->get_item()->scene())
+            sprite_jugador->get_item()->scene()->removeItem(sprite_jugador->get_item());
+        delete sprite_jugador;
+        sprite_jugador = nullptr;
+    }
+
+    if(sprite_boss)
+    {
+        if(sprite_boss->get_item() && sprite_boss->get_item()->scene())
+            sprite_boss->get_item()->scene()->removeItem(sprite_boss->get_item());
+        delete sprite_boss;
+        sprite_boss = nullptr;
+    }
 
     delete jefe;
     jefe = nullptr;

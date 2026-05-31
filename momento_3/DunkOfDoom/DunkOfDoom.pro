@@ -7,6 +7,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    boss_sprites.cpp \
     level.cpp \
     level_2.cpp \
     main.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
     powerup.cpp
 
 HEADERS += \
+    boss_sprites.h \
     config.h \
     level.h \
     level_2.h \
