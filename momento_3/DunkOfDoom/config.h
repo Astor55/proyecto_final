@@ -27,7 +27,7 @@ namespace config
         static constexpr float INTERVALO_ATAQUE   = 3.0f;
         static constexpr float VEL_PROYECTIL      = 3.0f;
         static constexpr float TELEGRAPH          = 0.5f;
-        static constexpr float DAÑO_LAVA        = 10.0f;
+        static constexpr float DAÑO_LAVA          = 10.0f;
 
     }
 
@@ -42,7 +42,7 @@ namespace config
         static constexpr float INTERVALO_ATAQUE   = 1.5f;
         static constexpr float VEL_PROYECTIL      = 6.0f;
         static constexpr float TELEGRAPH          = 0.1f;
-        static constexpr float DAÑO_LAVA        = 15.0f;
+        static constexpr float DAÑO_LAVA          = 15.0f;
 
     }
 
@@ -112,6 +112,7 @@ namespace config
         static constexpr const char* SFX_POWERUP     = "assets/sounds/sfx/powerup.wav";
         static constexpr const char* PLAYER_SHEET_2  = "assets/player/doom_comportamiento_level2.png";
         static constexpr const char* PLAYER_SHEET_T  = "assets/player/trap_player.png";
+        static constexpr const char* BOSS_SHEET      = "assets/enemy/boss_comportamiento_lvl2.png";
 
         //level_1
         static constexpr const char* SFX_SCORE       = "assets/sounds/sfx/score.wav";

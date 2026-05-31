@@ -8,7 +8,6 @@
 #include <QGraphicsScene>
 #include "level_2.h"
 #include "player.h"
-#include "player_sprites.h"
 #include <QGraphicsRectItem>
 
 QT_BEGIN_NAMESPACE
