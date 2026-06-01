@@ -32,6 +32,9 @@ public:
     //control
     void pausar() { pausado = true; }
     void reanudar() { pausado = false; }
+    void bajar_volumen(float vol) { if(audio_output) audio_output->setVolume(vol); }
+    void subir_volumen(float vol) { if(audio_output) audio_output->setVolume(vol); }
+    void set_volumen(float vol) { if(audio_output) audio_output->setVolume(vol); }
 
 protected:
 

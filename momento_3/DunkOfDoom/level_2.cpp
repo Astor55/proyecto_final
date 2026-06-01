@@ -305,6 +305,17 @@ void Level_2::actualizar_obstaculos(float dt)
 
         lavas[i]->actualizar(dt);
 
+        if(lavas[i]->get_estado() == LavaEstado::CAYENDO)
+        {
+            float x_lateral = (i == 0)
+            ? X_LAVA_IZQ + ANCHO_LAVA / 2.0f
+            : X_LAVA_DER + ANCHO_LAVA / 2.0f;
+
+            for(PowerUp* pu : powerups)
+                if(pu->esta_activo() && pu->get_x() == x_lateral)
+                    pu->forzar_desaparicion();
+        }
+
         //generar powerup cuando lava se retira
         if(lavas[i]->debe_generar_powerup())
         {
@@ -415,11 +426,16 @@ void Level_2::verificar_colisiones()
 void Level_2::generar_powerup(unsigned short indice_lava)
 {
 
+    // Posición en el lateral correspondiente
+    float x_lateral = (indice_lava == 0)
+                          ? X_LAVA_IZQ + ANCHO_LAVA / 2.0f
+                          : X_LAVA_DER + ANCHO_LAVA / 2.0f;
+
     // Limpiar powerups inactivos (lógica + sprites)
     size_t i = 0;
     while(i < powerups.size())
     {
-        if(!powerups[i]->esta_activo())
+        if(powerups[i]->get_x() == x_lateral)
         {
             delete powerups[i];
             powerups.erase(powerups.begin() + i);
@@ -428,17 +444,11 @@ void Level_2::generar_powerup(unsigned short indice_lava)
                 sprites_powerups[i]->get_item()->scene())
                 sprites_powerups[i]->get_item()->scene()
                     ->removeItem(sprites_powerups[i]->get_item());
-
             delete sprites_powerups[i];
             sprites_powerups.erase(sprites_powerups.begin() + i);
         }
         else ++i;
     }
-
-    // Posición en el lateral correspondiente
-    float x_lateral = (indice_lava == 0)
-                          ? X_LAVA_IZQ + ANCHO_LAVA / 2.0f
-                          : X_LAVA_DER + ANCHO_LAVA / 2.0f;
 
     PowerUp* pu = new PowerUp(x_lateral, 400.0f,
                               jugador->getvida(),
@@ -446,7 +456,6 @@ void Level_2::generar_powerup(unsigned short indice_lava)
     pu->curacion_cantidad = curacion_powerup;
     powerups.push_back(pu);
 
-    // Crear sprite asociado
     PowerUpSprites* ps = new PowerUpSprites(escena, 0.6f);
     sprites_powerups.push_back(ps);
 

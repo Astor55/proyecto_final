@@ -119,6 +119,10 @@ namespace config
         static constexpr const char* TRAP_DOOM       = "assets/sprites/trap_doom.png";
         static constexpr const char* HEALING_DOOM    = "assets/sprites/powerup_curacion.png";
         static constexpr const char* SPEED_DOOM      = "assets/sprites/powerup_velocidad.png";
+        static constexpr const char* VICTORY2        = "assets/sprites/ui/victory2.png";
+        static constexpr const char* GAME_OVER2      = "assets/sprites/ui/game_over2";
+        static constexpr const char* MUSICA_VICTORY   = "assets/sounds/music/victory.mp3";
+        static constexpr const char* MUSICA_GAME_OVER = "assets/sounds/music/game_over.mp3";
 
         //level_1
         static constexpr const char* SFX_SCORE       = "assets/sounds/sfx/score.wav";
