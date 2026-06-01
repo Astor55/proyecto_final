@@ -81,10 +81,15 @@ void Level_2::inicializar_trampas()
         zona zona(x_inicio + (ancho_zona * i),       // x_min
                   x_inicio + (ancho_zona * (i + 1)), // x_max
 
-                  400.0f,  //y_min
-                  680.0f); //y_max
+                  310.0f,  //y_min
+                  560.0f); //y_max
 
-        trampas[i] = new Trap(zona);
+        trampas[i] = new Trap(zona, [this](float x, float y)
+        {
+
+            return en_zona_valida(x, y);
+
+        });
 
     }
 }
@@ -107,6 +112,8 @@ void Level_2::inicializacion(player* p, QGraphicsScene* escena)
     QGraphicsPixmapItem* bg = escena->addPixmap(fondo);
     bg->setZValue(-1);
 
+    HUD = new HudSprites(escena, vida_jugador, 300.0f);
+
     sprite_jugador = new PlayerSprites(escena, 0.4f);
     sprite_jugador->set_pos(jugador->get_x(), jugador->get_y());
 
@@ -127,6 +134,14 @@ void Level_2::inicializacion(player* p, QGraphicsScene* escena)
 
     inicializar_lavas();
     inicializar_trampas();
+
+    for(unsigned short i = 0; i < 4; i++)
+    {
+
+        sprites_trampas[i] = new TrapSprites(escena, 0.06f);
+        sprites_trampas[i]->set_pos(trampas[i]->get_x(), trampas[i]->get_y());
+
+    }
 
     iniciar_musica(config::Assets::MUSICA_NIVEL2);
 
@@ -190,6 +205,10 @@ void Level_2::actualizar(float dt)
     //el boss ataca
     timer_ataque -= dt;
 
+    //modificar vida del boss segun el timer
+    float vida_por_segundo = VIDA_MAX_BOSS / config::NIVEL2::DURACION;
+    jefe->modificar_vida(-(vida_por_segundo * dt));
+
     if(timer_ataque <= 0.0f && proyectiles.size() < MAX_PROYECTILES)
     {
 
@@ -199,9 +218,6 @@ void Level_2::actualizar(float dt)
         //predecir posicion del jugador
         jefe->calcular_posicion_jugador(*jugador);
 
-        qDebug() << "jugador pos:" << jugador->get_x() << jugador->get_y();
-        qDebug() << "boss pos:" << jefe->get_x() << jefe->get_y();
-
         //crear nuevo proyectil
 
         Ball* proyectil = new Ball(modoBall::projectile, ComportamientoColision::Rebote, 3);
@@ -210,8 +226,6 @@ void Level_2::actualizar(float dt)
         proyectil->x = jefe->get_x();
         proyectil->y = jefe->get_y();
         jefe->lanzar_proyectil(*proyectil);
-
-        qDebug() << "proyectil lanzado vx:" << proyectil->vx << "vy:" << proyectil->vy;
 
         proyectiles.push_back(proyectil);
 
@@ -236,6 +250,16 @@ void Level_2::actualizar(float dt)
     for(size_t i = 0; i < proyectiles.size(); i++)
         sprites_proyectiles[i]->actualizar(*proyectiles[i], dt);
 
+    for(unsigned short i = 0; i < 4; i++)
+    {
+
+        sprites_trampas[i]->actualizar(dt, !trampas[i]->esta_activo(), !trampas[i]->es_colisionable());
+        sprites_trampas[i]->set_pos(trampas[i]->get_x(), trampas[i]->get_y());
+
+    }
+
+    actualizar_obstaculos(dt);
+
     sprite_boss->set_flip(jugador->get_x() > jefe->get_x());
 
     sprite_jugador->actualizar(dt,
@@ -244,6 +268,12 @@ void Level_2::actualizar(float dt)
                                jugador->get_inmovilizado()
                                );
     sprite_jugador->set_pos(jugador->get_x(), jugador->get_y());
+
+    HUD->actualizar(jugador->getvida(), vida_jugador,
+                    jefe->getvida(),   300.0f,
+                    timer_nivel);
+
+    jugador->actualizar(dt);
 
 }
 
@@ -303,7 +333,7 @@ void Level_2::verificar_colisiones()
 
     const float px = jugador->get_x();
     const float py = jugador->get_y();
-    const float pr = 24.0f;
+    const float pr = 12.0f;
 
     if(!en_zona_valida(jugador->get_x(), jugador->get_y()))
     {
@@ -447,6 +477,7 @@ void Level_2::finalizar()
 
     detener_musica();
 
+    //liberar sprite del jugador
     if(sprite_jugador)
     {
         if(sprite_jugador->get_item() && sprite_jugador->get_item()->scene())
@@ -455,6 +486,7 @@ void Level_2::finalizar()
         sprite_jugador = nullptr;
     }
 
+    //liberar sprite del boss
     if(sprite_boss)
     {
         if(sprite_boss->get_item() && sprite_boss->get_item()->scene())
@@ -463,9 +495,23 @@ void Level_2::finalizar()
         sprite_boss = nullptr;
     }
 
+    // liberar sprites trampas
+    for(unsigned short i = 0; i < 4; i++)
+    {
+        if(sprites_trampas[i])
+        {
+            if(sprites_trampas[i]->get_item() && sprites_trampas[i]->get_item()->scene())
+                sprites_trampas[i]->get_item()->scene()->removeItem(sprites_trampas[i]->get_item());
+            delete sprites_trampas[i];
+            sprites_trampas[i] = nullptr;
+        }
+    }
+
+    //liberar sprites de los proyectiles
     for(BallSprites* BS : sprites_proyectiles) delete BS;
     sprites_proyectiles.clear();
 
+    //liberar al boss
     delete jefe;
     jefe = nullptr;
 
@@ -491,10 +537,18 @@ void Level_2::finalizar()
     for(Ball* p : proyectiles) delete p;
     proyectiles.clear();
 
+    //liberar los powerups
     for(PowerUp* pu : powerups) delete pu;
     powerups.clear();
 
+    // liberar HUD
+    delete HUD;
+    HUD = nullptr;
+
+    //liberar al player
     jugador = nullptr;
+
+    //liberar la escena
     escena = nullptr;
 
 }

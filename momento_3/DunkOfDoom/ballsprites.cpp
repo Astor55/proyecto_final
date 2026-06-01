@@ -42,10 +42,6 @@ void BallSprites::precargar_frames()
                 Qt::IgnoreAspectRatio,
                 Qt::SmoothTransformation));
     }
-
-    qDebug() << "frames cargados:" << frames.size();
-    qDebug() << "frame 0 isNull:" << frames[0].isNull();
-
 }
 
 
@@ -78,8 +74,6 @@ void BallSprites::actualizar(const Ball& ball, float dt)
 {
 
     if(!item) return;
-
-    qDebug() << "ball activa:" << ball.Activa() << "x:" << ball.x << "y:" << ball.y;
 
     if(destruida)
     {

@@ -7,13 +7,15 @@ using namespace std;
 
 void player :: moverse(float dx, float dy){
 
+    if(inmovilizado) return; //cuando cae en la trampa
+
     dx_actual = dx;
 
     dy_actual = dy;
 
-    x+= dx * velocidad * config::DELTA_TIME;
+    x += dx * velocidad * config::DELTA_TIME;
 
-    y+= dy * velocidad * config::DELTA_TIME;
+    y += dy * velocidad * config::DELTA_TIME;
 
 }
 
@@ -67,6 +69,30 @@ void player::aplicar_boost_velocidad(float multiplicador, float duracion)
 
     boost_timer = duracion;
 
+}
+
+
+void player::actualizar(float dt)
+{
+    if(inmovilizado)
+    {
+        timer_inmovilizacion -= dt;
+        if(timer_inmovilizacion <= 0.0f)
+        {
+            inmovilizado = false;
+            timer_inmovilizacion = 0.0f;
+        }
+    }
+
+    if(boost_timer > 0.0f)
+    {
+        boost_timer -= dt;
+        if(boost_timer <= 0.0f)
+        {
+            velocidad = velocidad_base;
+            boost_timer = 0.0f;
+        }
+    }
 }
 
 

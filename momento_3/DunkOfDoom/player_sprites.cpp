@@ -42,8 +42,12 @@ void PlayerSprites::set_pos(float x, float y)
 
     if(!item) return;
 
+    float alto_visual = (estado_actual == EstadoAnim::Trampa)
+                            ? FH_TRAMPA * escala * ESCALA_TRAMPA
+                            : FILA_H[fila_de(estado_actual)] * escala;
+
     item->setPos(x - FW_PRINCIPAL * escala / 2.0f,
-                 y - FILA_H[fila_de(estado_actual)] * escala / 2.0f);
+                 y - alto_visual / 2.0f);
 
 }
 
@@ -215,8 +219,8 @@ void PlayerSprites::precargar_frames()
             }
 
         QPixmap frame = QPixmap::fromImage(img).scaled(
-            static_cast<int>(FW_TRAMPA * escala),
-            static_cast<int>(FH_TRAMPA * escala),
+            static_cast<int>(FW_TRAMPA * escala * ESCALA_TRAMPA),
+            static_cast<int>(FH_TRAMPA * escala * ESCALA_TRAMPA),
             Qt::IgnoreAspectRatio,
             Qt::SmoothTransformation);
 

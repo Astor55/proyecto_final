@@ -9,6 +9,7 @@ CONFIG += c++17
 SOURCES += \
     ballsprites.cpp \
     boss_sprites.cpp \
+    hud_sprites.cpp \
     level.cpp \
     level_2.cpp \
     main.cpp \
@@ -22,12 +23,14 @@ SOURCES += \
     player_sprites.cpp \
     trap.cpp \
     lava.cpp \
-    powerup.cpp
+    powerup.cpp \
+    trapsprites.cpp
 
 HEADERS += \
     ballsprites.h \
     boss_sprites.h \
     config.h \
+    hud_sprites.h \
     level.h \
     level_2.h \
     mainwindow.h \
@@ -41,6 +44,7 @@ HEADERS += \
     trap.h \
     lava.h \
     powerup.h \
+    trapsprites.h \
     zona.h
 
 FORMS += \

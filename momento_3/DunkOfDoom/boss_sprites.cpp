@@ -99,18 +99,6 @@ void BossSprites::set_pos(float x, float y)
 }
 
 
-// rotacion segun el angulo
-//void BossSprites::set_rotacion(float angulo_rad)
-//{
-
-//    if(!item) return;
-//    float grados = angulo_rad * 180.0f / M_PI - 90.0f;
-
-//    item->setRotation(grados);
-
-//}
-
-
 void BossSprites::set_flip(bool jugador_a_la_derecha)
 {
     if(!item) return;
@@ -134,20 +122,4 @@ void BossSprites::set_visible(bool v)
     if(item) item->setVisible(v);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
