@@ -10,6 +10,7 @@ SOURCES += \
     ballsprites.cpp \
     boss_sprites.cpp \
     hud_sprites.cpp \
+    lavasprites.cpp \
     level.cpp \
     level_2.cpp \
     main.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
     boss.cpp \
     obstacle.cpp \
     player_sprites.cpp \
+    powerupsprites.cpp \
     trap.cpp \
     lava.cpp \
     powerup.cpp \
@@ -31,6 +33,7 @@ HEADERS += \
     boss_sprites.h \
     config.h \
     hud_sprites.h \
+    lavasprites.h \
     level.h \
     level_2.h \
     mainwindow.h \
@@ -41,6 +44,7 @@ HEADERS += \
     boss.h \
     obstacle.h \
     player_sprites.h \
+    powerupsprites.h \
     trap.h \
     lava.h \
     powerup.h \
