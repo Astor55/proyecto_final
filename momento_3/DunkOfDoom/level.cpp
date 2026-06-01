@@ -32,6 +32,7 @@ Level::~Level()
 }
 
 
+
 //iniciar la musica
 void Level::iniciar_musica(const QString& ruta)
 {

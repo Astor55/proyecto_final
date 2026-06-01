@@ -63,8 +63,7 @@ void PowerUpSprites::actualizar(const PowerUp& pu, float dt)
     item->setPixmap(px);
 
     // Posicionar centrado en la posición del obstáculo
-    float offset = (64.0f * escala) / 2.0f;
-    item->setPos(pu.get_x() - offset, pu.get_y() - offset);
+    item->setPos(pu.get_x(), pu.get_y());
 
     // Parpadeo mientras es_colisionable() == false (primer segundo)
     if(!pu.es_colisionable())
