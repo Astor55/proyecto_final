@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(vista);
 
     jugador = new player(640.0f, 360.0f, 150.0f, 80.0f, 40.0f, false);
-    nivel   = new Level_2(false);
+    nivel   = new Level_2(true);
     nivel->inicializacion(jugador, escena);
 
     timer = new QTimer(this);

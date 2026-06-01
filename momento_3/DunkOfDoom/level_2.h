@@ -8,6 +8,8 @@
 #include "ballsprites.h"
 #include "hud_sprites.h"
 #include "trapsprites.h"
+#include "lavasprites.h"
+#include "powerupsprites.h"
 #include "trap.h"
 #include "powerup.h"
 #include "config.h"
@@ -47,6 +49,8 @@ public:
     BossSprites * sprite_boss = nullptr;
     std::vector<BallSprites*> sprites_proyectiles;
     std::array<TrapSprites*, 4> sprites_trampas;
+    std::array<LavaSprites*, 2> sprites_lavas = {nullptr, nullptr};
+    std::vector<PowerUpSprites*> sprites_powerups;
     HudSprites* HUD;
 
 private:
@@ -87,10 +91,10 @@ private:
     //consttantes
     static constexpr float ANCHO_PLATAFORMA = config::ANCHO_VENTANA;
     static constexpr float ALTO_PLATAFORMA  = config::ALTO_VENTANA;
-    static constexpr float ANCHO_LAVA       = 180.0f;
-    static constexpr float X_LAVA_IZQ       = 0.0f;
-    static constexpr float X_LAVA_DER       = ANCHO_PLATAFORMA - ANCHO_LAVA;
-    static constexpr float DESFASE_LAVA     = 7.5f;
+    static constexpr float ANCHO_LAVA       = config::NIVEL2::ANCHO_LAVA;
+    static constexpr float X_LAVA_IZQ       = config::NIVEL2::X_LAVA_IZQ;
+    static constexpr float X_LAVA_DER       = config::NIVEL2::X_LAVA_DER;
+    static constexpr float DESFASE_LAVA     = config::NIVEL2::DESFASE_LAVA;
     static constexpr unsigned short MAX_PROYECTILES = 6;
     static constexpr float VIDA_MAX_BOSS = 300.0f;
 

@@ -67,9 +67,9 @@ namespace config
     {
 
         static constexpr float DURACION           = 90.0f;
-        static constexpr float ANCHO_LAVA         = 180.0f;
-        static constexpr float X_LAVA_IZQ         = 0.0f;
-        static constexpr float X_LAVA_DER         = 1280.0f - 180.0f;
+        static constexpr float ANCHO_LAVA         = 150.0f;
+        static constexpr float X_LAVA_IZQ         = 200.0f;
+        static constexpr float X_LAVA_DER         = 916.0f;
         static constexpr float DESFASE_LAVA       = 7.5f;
         static constexpr int   NUM_TRAMPAS        = 4;
         static constexpr int   MAX_PROYECTILES    = 6;
@@ -117,6 +117,8 @@ namespace config
         static constexpr const char* BARRA_BOSS      = "assets/sprites/ui/healthbar_boss.png";
         static constexpr const char* FUENTE_DOOM     = "assets/fonts/doom.ttf";
         static constexpr const char* TRAP_DOOM       = "assets/sprites/trap_doom.png";
+        static constexpr const char* HEALING_DOOM    = "assets/sprites/powerup_curacion.png";
+        static constexpr const char* SPEED_DOOM      = "assets/sprites/powerup_velocidad.png";
 
         //level_1
         static constexpr const char* SFX_SCORE       = "assets/sounds/sfx/score.wav";

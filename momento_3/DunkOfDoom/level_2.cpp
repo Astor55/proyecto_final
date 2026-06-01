@@ -70,27 +70,22 @@ void Level_2::inicializar_lavas()
 //Inicializacion tramapas - zonas automatica
 void Level_2::inicializar_trampas()
 {
-
-    float x_inicio = X_LAVA_IZQ + ANCHO_LAVA;
-    float ancho_util = ANCHO_PLATAFORMA - (ANCHO_LAVA * 2);
-    float ancho_zona = ancho_util / 4.0f;
+    zona zonas[4] = {
+        // 2 trampas en la central (mitad izquierda y derecha)
+        { C_IZQ  + 20.0f, C_IZQ + (C_DER - C_IZQ) / 2.0f - 10.0f, C_ARR + 15.0f, C_ABA - 15.0f },
+        { C_IZQ  + (C_DER - C_IZQ) / 2.0f + 10.0f, C_DER - 20.0f, C_ARR + 15.0f, C_ABA - 15.0f },
+        // 1 trampa en plataforma izquierda
+        { PI_IZQ + 10.0f, PI_DER - 10.0f, PI_ARR + 15.0f, PI_ABA - 15.0f },
+        // 1 trampa en plataforma derecha
+        { PD_IZQ + 10.0f, PD_DER - 10.0f, PD_ARR + 15.0f, PD_ABA - 15.0f }
+    };
 
     for(unsigned short i = 0; i < 4; i++)
     {
-
-        zona zona(x_inicio + (ancho_zona * i),       // x_min
-                  x_inicio + (ancho_zona * (i + 1)), // x_max
-
-                  310.0f,  //y_min
-                  560.0f); //y_max
-
-        trampas[i] = new Trap(zona, [this](float x, float y)
-        {
-
-            return en_zona_valida(x, y);
-
-        });
-
+        trampas[i] = new Trap(zonas[i], [this](float x, float y)
+                              {
+                                  return en_zona_valida(x, y);
+                              });
     }
 }
 
@@ -134,6 +129,9 @@ void Level_2::inicializacion(player* p, QGraphicsScene* escena)
 
     inicializar_lavas();
     inicializar_trampas();
+
+    sprites_lavas[0] = new LavaSprites(escena, X_LAVA_IZQ, ANCHO_LAVA);
+    sprites_lavas[1] = new LavaSprites(escena, X_LAVA_DER, ANCHO_LAVA);
 
     for(unsigned short i = 0; i < 4; i++)
     {
@@ -250,6 +248,9 @@ void Level_2::actualizar(float dt)
     for(size_t i = 0; i < proyectiles.size(); i++)
         sprites_proyectiles[i]->actualizar(*proyectiles[i], dt);
 
+    for(unsigned short i = 0; i < 2; i++)
+        sprites_lavas[i]->actualizar(*lavas[i]);
+
     for(unsigned short i = 0; i < 4; i++)
     {
 
@@ -319,9 +320,13 @@ void Level_2::actualizar_obstaculos(float dt)
         trampas[i]->actualizar(dt);
 
     //PowerUps
-    for(PowerUp* pu : powerups)
-        pu->actualizar(dt);
+    for(size_t i = 0; i < powerups.size(); i++)
+    {
 
+        powerups[i]->actualizar(dt);
+        sprites_powerups[i]->actualizar(*powerups[i], dt);
+
+    }
 }
 
 
@@ -410,29 +415,27 @@ void Level_2::verificar_colisiones()
 void Level_2::generar_powerup(unsigned short indice_lava)
 {
 
-    //eliminar el PowerUp anterior
-    for(auto it = powerups.begin(); it != powerups.end();)
+    // Limpiar powerups inactivos (lógica + sprites)
+    size_t i = 0;
+    while(i < powerups.size())
     {
-
-        PowerUp* pu = *it;
-
-        if(!pu->esta_activo())
+        if(!powerups[i]->esta_activo())
         {
+            delete powerups[i];
+            powerups.erase(powerups.begin() + i);
 
-            delete pu;
-            it = powerups.erase(it);
+            if(sprites_powerups[i]->get_item() &&
+                sprites_powerups[i]->get_item()->scene())
+                sprites_powerups[i]->get_item()->scene()
+                    ->removeItem(sprites_powerups[i]->get_item());
 
+            delete sprites_powerups[i];
+            sprites_powerups.erase(sprites_powerups.begin() + i);
         }
-
-        else
-        {
-
-            ++it;
-
-        }
+        else ++i;
     }
 
-    //posicion aleatoria dentro de los laterales
+    // Posición en el lateral correspondiente
     float x_lateral = (indice_lava == 0)
                           ? X_LAVA_IZQ + ANCHO_LAVA / 2.0f
                           : X_LAVA_DER + ANCHO_LAVA / 2.0f;
@@ -440,9 +443,12 @@ void Level_2::generar_powerup(unsigned short indice_lava)
     PowerUp* pu = new PowerUp(x_lateral, 400.0f,
                               jugador->getvida(),
                               vida_jugador);
-
     pu->curacion_cantidad = curacion_powerup;
     powerups.push_back(pu);
+
+    // Crear sprite asociado
+    PowerUpSprites* ps = new PowerUpSprites(escena, 0.6f);
+    sprites_powerups.push_back(ps);
 
 }
 
@@ -524,6 +530,13 @@ void Level_2::finalizar()
 
     }
 
+    //liberar sprite de lavas
+    for(unsigned short i = 0; i < 2; i++)
+    {
+        delete sprites_lavas[i];
+        sprites_lavas[i] = nullptr;
+    }
+
     //liberar trampas
     for(unsigned short i = 0; i < 4; i++)
     {
@@ -538,8 +551,19 @@ void Level_2::finalizar()
     proyectiles.clear();
 
     //liberar los powerups
-    for(PowerUp* pu : powerups) delete pu;
+    for(size_t i = 0; i < powerups.size(); i++)
+    {
+        if(sprites_powerups[i]->get_item() &&
+            sprites_powerups[i]->get_item()->scene())
+            sprites_powerups[i]->get_item()->scene()
+                ->removeItem(sprites_powerups[i]->get_item());
+        delete sprites_powerups[i];
+        delete powerups[i];
+    }
+    sprites_powerups.clear();
     powerups.clear();
+
+
 
     // liberar HUD
     delete HUD;
