@@ -66,6 +66,9 @@ private:
     static constexpr int FW_TRAMPA       = 81;
     static constexpr int FH_TRAMPA       = 385;
 
+    //escala player en trampa
+    static constexpr float ESCALA_TRAMPA = 2.0f;
+
     // Estado
     QGraphicsPixmapItem* item;
     EstadoAnim estado_actual;

@@ -3,6 +3,9 @@
 
 #include "obstacle.h"
 #include "zona.h"
+#include <functional>
+
+using ValidadorZona = std::function<bool(float, float)>;
 
 class player;
 
@@ -11,7 +14,7 @@ class Trap : public Obstacle
 
 public:
 
-    Trap(const zona& otro);
+    Trap(const zona& otro, ValidadorZona validador);
     ~Trap() override = default;
 
     // evitar copias
@@ -25,6 +28,8 @@ public:
 private:
 
     zona zona_asignada; //donde puede reaparecer
+
+    ValidadorZona validador;
 
     bool activada; // true = si fue pisada
 

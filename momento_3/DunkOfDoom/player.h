@@ -30,5 +30,7 @@ class player : public character
 
         void resetear_direccion() { dx_actual = 0.0f; dy_actual = 0.0f; }
 
+        void actualizar(float dt);
+
 };
 #endif // PLAYER_H

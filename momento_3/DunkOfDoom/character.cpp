@@ -31,7 +31,7 @@ void character :: modificar_vida(float cantidad){
 
     vida+= cantidad; // Si cantidad es negativa, disminuye la vida, si es positiva, aumenta
 
-    if(vida < vida_max) vida = vida_max;
+    if(vida > vida_max) vida = vida_max;
 
     if(vida < 0.0f) vida = 0.0f;
 

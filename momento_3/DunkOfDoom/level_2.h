@@ -6,6 +6,8 @@
 #include "player_sprites.h"
 #include "boss_sprites.h"
 #include "ballsprites.h"
+#include "hud_sprites.h"
+#include "trapsprites.h"
 #include "trap.h"
 #include "powerup.h"
 #include "config.h"
@@ -44,6 +46,8 @@ public:
     PlayerSprites* sprite_jugador = nullptr;
     BossSprites * sprite_boss = nullptr;
     std::vector<BallSprites*> sprites_proyectiles;
+    std::array<TrapSprites*, 4> sprites_trampas;
+    HudSprites* HUD;
 
 private:
 
@@ -88,6 +92,7 @@ private:
     static constexpr float X_LAVA_DER       = ANCHO_PLATAFORMA - ANCHO_LAVA;
     static constexpr float DESFASE_LAVA     = 7.5f;
     static constexpr unsigned short MAX_PROYECTILES = 6;
+    static constexpr float VIDA_MAX_BOSS = 300.0f;
 
     //limites o zonas validas
     bool en_zona_valida(float px, float py) const;

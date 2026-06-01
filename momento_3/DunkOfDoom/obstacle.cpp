@@ -26,7 +26,7 @@ bool Obstacle::colisiona_con(float px, float py,
     return px + pradio > x &&
            px - pradio < x + ancho &&
            py + pradio > y &&
-           py - pradio < pradio + alto;
+           py - pradio < y + alto;
 
 }
 
