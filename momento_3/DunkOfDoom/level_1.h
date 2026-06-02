@@ -7,16 +7,19 @@
 #include "character.h"
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
+#include <QGraphicsTextItem>
+#include <QGraphicsRectItem>
+
 
 
 enum class EstadoAnimacion : unsigned char
 {
-    CAMINANDO_CON_BALON,
-    CORRIENDO_CON_BALON,
-    LANZANDO,
-    CORRIENDO_SIN_BALON
-};
+    CAMINANDO_CON_BALON,  // fila 0
+    CORRIENDO_CON_BALON,  // fila 1
+    LANZANDO,             // fila 2
+    CORRIENDO_SIN_BALON,  // fila 3
 
+};
 class Level_1 : public Level
 {
 
@@ -29,6 +32,11 @@ class Level_1 : public Level
         float canasta_enemy_y;
         float canasta_player_x;
         float canasta_player_y;
+        bool balon_en_aire = false;
+        float timer_invulnerabilidad = 0.0f; // Invulnerabilidad del balon cuando se lanza (Esta en el suelo)
+        float timer_invulnerabilidad_enemigo = 0.0f;
+        QGraphicsTextItem* texto_canasta;
+        float timer_texto_canasta = 0.0f;
         Ball* balon;
         Enemy* enemigo;
         character* ganador;
@@ -47,6 +55,20 @@ class Level_1 : public Level
         float timer_frame_jugador;
         float timer_frame_enemigo;
 
+        QGraphicsTextItem* texto_puntos_player;
+        QGraphicsTextItem* texto_puntos_enemy;
+        QGraphicsTextItem* texto_tiempo;
+
+        QGraphicsRectItem* rect_player;
+        QGraphicsRectItem* rect_enemy;
+        QGraphicsTextItem* texto_label_player;
+        QGraphicsTextItem* texto_label_enemy;
+
+        QPixmap sheet_balon;
+        QGraphicsPixmapItem* sprite_balon;
+
+        QGraphicsPixmapItem* pantalla_final;
+
 
     public:
 
@@ -64,6 +86,12 @@ class Level_1 : public Level
 
         character* getganador() const;
         float gettiemporestante()const;
+        Ball* getBalon() const;
+        Enemy* getEnemigo() const;
+        float getCanasta_enemy_x() const { return canasta_enemy_x; }
+        float getCanasta_enemy_y() const { return canasta_enemy_y; }
+        void setBalonEnAire(bool valor);
+        void lanzar_balon_jugador(float fuerza);
 
 };
 

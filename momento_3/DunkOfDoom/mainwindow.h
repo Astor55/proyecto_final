@@ -35,5 +35,10 @@ private:
     bool tecla_izquierda = false;
     bool tecla_arriba = false;
     bool tecla_abajo = false;
+    bool tecla_arrebatar = false;
+    bool tecla_lanzar = false;
+    float timer_lanzamiento = 0.0f;
+    bool lanzando = false;
+    bool espacio_presionado = false;
 };
 #endif // MAINWINDOW_H
