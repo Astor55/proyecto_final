@@ -572,8 +572,6 @@ void Level_2::finalizar()
     sprites_powerups.clear();
     powerups.clear();
 
-
-
     // liberar HUD
     delete HUD;
     HUD = nullptr;
