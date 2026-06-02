@@ -105,6 +105,8 @@ namespace config
         static constexpr const char* SFX_HIT         = "assets/sounds/sfx/hit.wav";
         static constexpr const char* SFX_POWERUP     = "assets/sounds/sfx/powerup.wav";
 
+        static constexpr const char* MUSIC_LEVEL1    = "assets/music_level1.mp3";
+
     }
 }
 #endif // CONFIG_H
