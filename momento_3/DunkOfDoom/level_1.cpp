@@ -209,7 +209,7 @@ void Level_1::actualizar(float dt)
 
 void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
 
-    iniciar_musica("C:/Users/EGONZALEZ/Desktop/Proyecto_final/proyecto_final/momento_3/DunkOfDoom/assets/music_level1.mp3");
+    iniciar_musica(config::Assets::MUSIC_LEVEL1);
 
     // fondo - se agrega primero para que quede detras de todo
     QPixmap fondo(":/assets/sprites/level1.doom.png");
