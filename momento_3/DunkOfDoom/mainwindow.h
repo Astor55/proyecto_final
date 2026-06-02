@@ -79,7 +79,7 @@ private:
     bool  esperando_final  = false;
     bool  gano_nivel       = false;
     bool  pausado          = false;
-    bool  es_dificil       = true;
+    bool  es_dificil       = false;
 
     float delay_final      = 0.0f;
     float volumen_global = 0.5f;

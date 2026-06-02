@@ -31,8 +31,6 @@ bool Obstacle::colisiona_con(float px, float py,
 }
 
 
-
-
 //parpadeo
 void Obstacle::iniciar_parpadeo()
 {
