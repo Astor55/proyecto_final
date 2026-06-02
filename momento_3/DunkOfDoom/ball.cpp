@@ -1,6 +1,7 @@
 #include "ball.h"
 #include "character.h"
 #include <cmath>
+#include <QDebug>
 
 
 
@@ -89,7 +90,6 @@ void Ball::actualizar(float cambio)
     //si tiene portador
     if(portador)
     {
-
         x = portador->get_x() + OFFSET_X;
         y = portador->get_y() + OFFSET_Y;
         return;

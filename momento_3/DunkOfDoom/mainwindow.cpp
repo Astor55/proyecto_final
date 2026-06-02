@@ -43,6 +43,16 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
     case Qt::Key_A: tecla_izquierda = true; break;
     case Qt::Key_W: tecla_arriba = true; break;
     case Qt::Key_S: tecla_abajo = true; break;
+    case Qt::Key_E:     tecla_arrebatar = true; break;
+    case Qt::Key_Space:
+        if(!espacio_presionado && !event->isAutoRepeat())
+        {
+            espacio_presionado = true;
+            lanzando = true;
+            timer_lanzamiento = 0.0f;
+        }
+        break;
+
     }
 }
 
@@ -54,6 +64,16 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
     case Qt::Key_A: tecla_izquierda = false; break;
     case Qt::Key_W: tecla_arriba = false; break;
     case Qt::Key_S: tecla_abajo = false; break;
+    case Qt::Key_E:     tecla_arrebatar = false; break;
+    case Qt::Key_Space:
+        if(!event->isAutoRepeat() && espacio_presionado)
+        {
+            espacio_presionado = false;
+            lanzando = false;
+            nivel->lanzar_balon_jugador(timer_lanzamiento * 100.0f);
+        }
+        break;
+
     }
 }
 
@@ -69,9 +89,15 @@ void MainWindow::game_loop()
         jugador->moverse(dx, dy);
     else
     {
-        jugador->setdx(0); // resetear direccion cuando no hay input
+        jugador->setdx(0);
         jugador->setdy(0);
     }
+
+    if(lanzando)
+        timer_lanzamiento = qMin(timer_lanzamiento + 1.0f/10.0f, 1.0f); // 6 veces mas rapido
+
+    if(tecla_arrebatar)
+        jugador->atacar(*nivel->getEnemigo(), *nivel->getBalon());
 
     nivel->actualizar(1.0f / 60.0f);
 }
