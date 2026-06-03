@@ -13,10 +13,8 @@ Level_1 :: Level_1() : Level(), puntos_player(0), puntos_enemy(0), tiempo_restan
 
 }
 
-
 void Level_1::actualizar(float dt)
 {
-
     // mostrar pantalla final si termino
     if(terminado)
     {
@@ -34,12 +32,27 @@ void Level_1::actualizar(float dt)
             pantalla_final->setPos(0, 0);
             pantalla_final->setVisible(true);
         }
+        else
+        {
+            // Empate: mostrar texto sobre fondo negro semitransparente
+            pantalla_final->setPixmap(QPixmap()); // pixmap vacío
+            pantalla_final->setVisible(false);
+            if(!texto_canasta->isVisible())
+            {
+                texto_canasta->setPlainText("¡EMPATE!");
+                texto_canasta->setPos(530, 320);
+                texto_canasta->setDefaultTextColor(Qt::cyan);
+                QFont f("Arial", 40, QFont::Bold);
+                texto_canasta->setFont(f);
+                texto_canasta->setVisible(true);
+            }
+        }
         return;
     }
 
     if(pausado) return;
 
-    // actualizar tiempo
+    // ── TIEMPO ──────────────────────────────────────────────
     tiempo_restante -= dt;
     if(tiempo_restante <= 0)
     {
@@ -49,62 +62,125 @@ void Level_1::actualizar(float dt)
         return;
     }
 
-    // actualizar estados de animacion
-    if(balon->portador == jugador)
-    {
-        if(jugador->getdx_actual() != 0 || jugador->getdy_actual() != 0)
-            estado_jugador = EstadoAnimacion::CORRIENDO_CON_BALON;
-        else
-            estado_jugador = EstadoAnimacion::CAMINANDO_CON_BALON;
-    }
-    else
-    {
-        if(jugador->getdx_actual() != 0 || jugador->getdy_actual() != 0)
-            estado_jugador = EstadoAnimacion::CORRIENDO_SIN_BALON;
-    }
-
-    if(balon->portador == enemigo)
-        estado_enemigo = EstadoAnimacion::CAMINANDO_CON_BALON;
-    else if(estado_enemigo == EstadoAnimacion::LANZANDO && balon->portador == nullptr)
-        estado_enemigo = EstadoAnimacion::LANZANDO;
-    else
-        estado_enemigo = EstadoAnimacion::CORRIENDO_SIN_BALON;
-
-
-    // actualizar invulnerabilidad
+    // ── TIMERS ──────────────────────────────────────────────
     if(timer_invulnerabilidad > 0)
         timer_invulnerabilidad -= dt;
 
-    // actualizar balon
-    balon->actualizar(dt);
-
-    // limites de la cancha para el balon
-    if(balon->x < 150)  { balon->x = 150;  balon->vx = -balon->vx; }
-    if(balon->x > 1045) { balon->x = 1045; balon->vx = -balon->vx; }
-    if(balon->y < 320)  { balon->y = 320;  balon->vy = -balon->vy; }
-    if(balon->y > 600)  { balon->y = 600;  balon->vy = -balon->vy; }
-
-    balon->verificar_colision_paredes(1280.0f, 720.0f);
-
-    if(balon->portador == nullptr && timer_invulnerabilidad <= 0)
+    if(timer_canasta_anotada > 0)
     {
-        timer_invulnerabilidad = 0.3f;
-        balon->verificar_colision_charater(jugador);
-        balon->verificar_colision_charater(enemigo);
+        timer_canasta_anotada -= dt;
+        if(timer_canasta_anotada <= 0)
+            canasta_anotada = false;
     }
 
+    if(timer_texto_canasta > 0)
+    {
+        timer_texto_canasta -= dt;
+        if(timer_texto_canasta <= 0)
+            texto_canasta->setVisible(false);
+    }
+
+    // FIX #6: timer de animación LANZANDO: vuelve al estado normal al terminar
+    if(timer_lanzando > 0.0f)
+    {
+        timer_lanzando -= dt;
+        if(timer_lanzando <= 0.0f)
+            timer_lanzando = 0.0f;
+    }
+
+    if(en_countdown)
+    {
+        jugador->setdx(0);
+        jugador->setdy(0);
+
+        timer_countdown -= dt;
+        if(timer_countdown <= 0.0f)
+        {
+            cuenta--;
+            if(cuenta <= 0)
+            {
+                en_countdown = false;
+                texto_countdown->setVisible(false);
+                // El balon queda libre en el centro: quien llegue primero lo agarra
+                balon->soltar();
+                balon->activa = true;
+                balon->vx = 0.0f;
+                balon->vy = 0.0f;
+            }
+            else
+            {
+                timer_countdown = 1.0f;
+                texto_countdown->setPlainText(QString::number(cuenta));
+            }
+        }
+    }
+
+    // ── BALON ───────────────────────────────────────────────
+    if(!en_countdown)
+    {
+        balon->actualizar(dt);
+
+        balon->verificar_colision_paredes(1280.0f, 720.0f);
+
+        if(balon->portador == nullptr && timer_invulnerabilidad <= 0)
+        {
+            balon->verificar_colision_charater(jugador);
+            balon->verificar_colision_charater(enemigo);
+        }
+    }
+
+    balon_en_aire = (balon->portador == nullptr && balon->activa);
+
+    // ── PUNTOS ──────────────────────────────────────────────
     sumar_puntos_player();
     sumar_puntos_enemy();
 
-    enemigo->percepcion(*jugador, *balon, dt);
-    enemigo->razonamiento();
-    enemigo->accion(*jugador, *balon, canasta_player_x, canasta_player_y, timer_invulnerabilidad);
+    // ── ENEMIGO (IA) ─────────────────────────────────────────
+    if(!en_countdown)
+    {
+        enemigo->percepcion(*jugador, *balon, dt, canasta_player_x, canasta_player_y);
+        enemigo->razonamiento();
+        enemigo->accion(*jugador, *balon, canasta_player_x, canasta_player_y, timer_invulnerabilidad);
+    }
+    else
+    {
+        enemigo->setdx(0);
+        enemigo->setdy(0);
+    }
 
-    // actualizar timers de animacion
+    // ── ESTADOS DE ANIMACION ─────────────────────────────────
+    // FIX #6: LANZANDO tiene prioridad mientras el timer esté activo
+    if(timer_lanzando > 0.0f)
+    {
+        estado_jugador = EstadoAnimacion::LANZANDO;
+    }
+    else if(balon->portador == jugador)
+    {
+        estado_jugador = (jugador->getdx_actual() != 0 || jugador->getdy_actual() != 0)
+        ? EstadoAnimacion::CORRIENDO_CON_BALON
+        : EstadoAnimacion::IDLE_CON_BALON;
+    }
+    else
+    {
+        estado_jugador = (jugador->getdx_actual() != 0 || jugador->getdy_actual() != 0)
+        ? EstadoAnimacion::CORRIENDO_SIN_BALON
+        : EstadoAnimacion::IDLE;
+    }
+
+    if(balon->portador == enemigo)
+        estado_enemigo = (enemigo->getdx_actual() != 0 || enemigo->getdy_actual() != 0)
+                             ? EstadoAnimacion::CORRIENDO_CON_BALON
+                             : EstadoAnimacion::IDLE_CON_BALON;
+    else
+        estado_enemigo = (enemigo->getdx_actual() != 0 || enemigo->getdy_actual() != 0)
+                             ? EstadoAnimacion::CORRIENDO_SIN_BALON
+                             : EstadoAnimacion::IDLE;
+
+    // ── TIMERS DE FRAMES ─────────────────────────────────────
     timer_frame_jugador += dt;
     timer_frame_enemigo += dt;
 
-    float duracion_frame = 0.15f;
+    static constexpr float DURACION_FRAME = 0.15f;
 
     if(estado_jugador != estado_anterior_jugador)
     {
@@ -113,44 +189,60 @@ void Level_1::actualizar(float dt)
         estado_anterior_jugador = estado_jugador;
     }
 
-    if(timer_frame_jugador >= duracion_frame)
+    if(timer_frame_jugador >= DURACION_FRAME)
     {
         timer_frame_jugador = 0.0f;
-        int max_frames = (estado_jugador == EstadoAnimacion::CAMINANDO_CON_BALON ||
-                          estado_jugador == EstadoAnimacion::CORRIENDO_CON_BALON) ? 5 : 6;
-        frame_jugador = (frame_jugador + 1) % max_frames;
+        frame_jugador = (frame_jugador + 1) % 8;
     }
 
-    if(timer_frame_enemigo >= duracion_frame)
+    if(timer_frame_enemigo >= DURACION_FRAME)
     {
         timer_frame_enemigo = 0.0f;
-        if(estado_enemigo == EstadoAnimacion::CAMINANDO_CON_BALON ||
-            estado_enemigo == EstadoAnimacion::CORRIENDO_CON_BALON)
-            frame_enemigo = 5;
-        else
-            frame_enemigo = (frame_enemigo + 1) % 6;
+        frame_enemigo = (frame_enemigo + 1) % 6;
     }
 
-    // calcular fila segun estado
-    auto calcular_fila = [](EstadoAnimacion estado) -> int {
+    // ── SPRITES ──────────────────────────────────────────────
+    auto calcular_fila_jugador = [](EstadoAnimacion estado) -> int {
         switch(estado) {
-        case EstadoAnimacion::CAMINANDO_CON_BALON:  return 0;
+        case EstadoAnimacion::IDLE_CON_BALON:       return 0;
         case EstadoAnimacion::CORRIENDO_CON_BALON:  return 1;
         case EstadoAnimacion::LANZANDO:             return 2;
         case EstadoAnimacion::CORRIENDO_SIN_BALON:  return 3;
-        default: return 0;
+        case EstadoAnimacion::IDLE:                 return 4;
+        default:                                    return 4;
         }
     };
 
-    // recortar y mostrar frame del jugador
-    int fila_jugador = calcular_fila(estado_jugador);
-    int frame_w_jugador = (fila_jugador <= 1) ? 135 : 112;
-    QPixmap recorte_jugador = sheet_jugador.copy(
-        frame_jugador * frame_w_jugador,
-        fila_jugador * 94,
-        frame_w_jugador, 88);
+    auto calcular_fila_enemigo = [](EstadoAnimacion estado) -> int {
+        switch(estado) {
+        case EstadoAnimacion::IDLE_CON_BALON:       return 0;
+        case EstadoAnimacion::CORRIENDO_CON_BALON:  return 1;
+        case EstadoAnimacion::LANZANDO:             return 2;
+        case EstadoAnimacion::CORRIENDO_SIN_BALON:  return 3;
+        case EstadoAnimacion::IDLE:                 return 3; // enemigo no tiene fila IDLE propia → reusar CORR_SIN_BALON
+        default:                                    return 3;
+        }
+    };
 
-    // voltear si se mueve a la izquierda
+    // ── JUGADOR ──────────────────────────────────────────────
+    // Escalamos a 160px de alto (más grande, se ve mejor en cancha 1280x720)
+    // Offsets de pies medidos con precisión pixel por fila (escalado a 160px alto):
+    // Filas 0-3: pies en 159px. Fila 4 (IDLE, contenido más corto): pies en 104px.
+    static constexpr int JUGADOR_DEST_H = 100;
+    static constexpr int JUGADOR_DEST_W = 100;
+
+    int fila = calcular_fila_jugador(estado_jugador);
+    QPixmap recorte_jugador = sheet_jugador.copy(
+        FILA_COL_X[frame_jugador],
+        FILA_Y[fila],
+        FW,
+        FILA_H[fila]);
+
+    recorte_jugador = recorte_jugador.scaled(
+        JUGADOR_DEST_W, JUGADOR_DEST_H,
+        Qt::IgnoreAspectRatio,
+        Qt::SmoothTransformation);
+
     if(jugador->getdx_actual() < 0)
     {
         QTransform flip;
@@ -158,15 +250,26 @@ void Level_1::actualizar(float dt)
         recorte_jugador = recorte_jugador.transformed(flip);
     }
     sprite_jugador->setPixmap(recorte_jugador);
+    sprite_jugador->setPos(jugador->getx() - JUGADOR_DEST_W / 2,
+                           jugador->gety() - JUGADOR_DEST_H);
 
+    // ── ENEMIGO ──────────────────────────────────────────────
+    // Offsets de pies medidos con precisión por fila (escalado a 120px alto):
+    // Fila 0: 111, Fila 1: 106, Fila 2: 119, Fila 3: 103
+    static constexpr int ENEMIGO_DEST_H = 120;
+    static constexpr int ENEMIGO_DEST_W = 120;
+    static constexpr int ENEMIGO_OFFSET_PIES[4] = {111, 106, 119, 103};
 
-    // recortar y mostrar frame del enemigo
-    static constexpr int FILA_Y_ENEMIGO[] = {18, 105, 206, 295};
-    int fila_enemigo = calcular_fila(estado_enemigo);
+    int fila_e = calcular_fila_enemigo(estado_enemigo);
     QPixmap recorte_enemigo = sheet_enemigo.copy(
-        frame_enemigo * 111,
-        FILA_Y_ENEMIGO[fila_enemigo],
-        111, 87);
+        frame_enemigo * FW_ENEMIGO,
+        FILA_Y_ENEMIGO[fila_e],
+        FW_ENEMIGO, FH_ENEMIGO);
+
+    recorte_enemigo = recorte_enemigo.scaled(
+        ENEMIGO_DEST_W, ENEMIGO_DEST_H,
+        Qt::KeepAspectRatio,
+        Qt::SmoothTransformation);
 
     if(enemigo->getdx_actual() < 0)
     {
@@ -175,35 +278,22 @@ void Level_1::actualizar(float dt)
         recorte_enemigo = recorte_enemigo.transformed(flip);
     }
     sprite_enemigo->setPixmap(recorte_enemigo);
+    sprite_enemigo->setPos(enemigo->getx() - recorte_enemigo.width() / 2,
+                           enemigo->gety() - ENEMIGO_OFFSET_PIES[fila_e]);
 
-    // sincronizar posicion grafica con logica
-    sprite_jugador->setPos(jugador->getx(), jugador->gety());
-    sprite_enemigo->setPos(enemigo->getx(), enemigo->gety());
-
-    // timer texto canasta
-    if(timer_texto_canasta > 0)
+    // ── BALON SPRITE ─────────────────────────────────────────
+    if(balon_en_aire)
     {
-        timer_texto_canasta -= dt;
-        if(timer_texto_canasta <= 0)
-            texto_canasta->setVisible(false);
-    }
-
-    // marcador y tiempo
-    texto_puntos_player->setPlainText(QString::number(puntos_player));
-    texto_puntos_enemy->setPlainText(QString::number(puntos_enemy));
-    texto_tiempo->setPlainText(QString::number((int)tiempo_restante));
-
-    // sprite del balon
-    if(balon_en_aire && balon->activa)
-    {
-        sprite_balon->setPos(balon->x, balon->y);
+        sprite_balon->setPos(balon->x - 30, balon->y - 30);
         sprite_balon->setVisible(true);
     }
     else
         sprite_balon->setVisible(false);
 
-    if(balon->portador != nullptr && balon->portador != jugador)
-        balon_en_aire = false;
+    // ── HUD ──────────────────────────────────────────────────
+    texto_puntos_player->setPlainText(QString::number(puntos_player));
+    texto_puntos_enemy->setPlainText(QString::number(puntos_enemy));
+    texto_tiempo->setPlainText(QString::number((int)tiempo_restante));
 }
 
 
@@ -222,35 +312,33 @@ void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
     jugador = p;
     this->escena = escena;
 
-    canasta_player_x = 160;
-    canasta_player_y = 363;
+    canasta_player_x = 145;
+    canasta_player_y = 282;
 
-    canasta_enemy_x  = 1040;
-    canasta_enemy_y  = 363;
+    canasta_enemy_x  = 1132;
+    canasta_enemy_y  = 282;
 
     qDebug() << "Canasta enemiga inicializada en : " << float(canasta_enemy_x) << float(canasta_enemy_y);
 
-    jugador->setx(300.0f);
+    jugador->setx(440.0f);
     jugador->sety(500.0f);
 
+    // FIX #2: crear texto_puntos_player antes de usarlo
     texto_puntos_player = new QGraphicsTextItem();
     texto_puntos_enemy  = new QGraphicsTextItem();
     texto_tiempo        = new QGraphicsTextItem();
 
-    // estilo del texto
-    QFont fuente("Arial", 24, QFont::Bold);
-    texto_puntos_player->setFont(fuente);
-    texto_puntos_enemy->setFont(fuente);
-    texto_tiempo->setFont(fuente);
-
+    // FIX #4: una sola asignación de estilo y posición (eliminado el bloque duplicado más abajo)
+    QFont fuente_puntos("Arial", 24, QFont::Bold);
+    texto_puntos_player->setFont(fuente_puntos);
+    texto_puntos_enemy->setFont(fuente_puntos);
+    texto_tiempo->setFont(fuente_puntos);
     texto_puntos_player->setDefaultTextColor(Qt::white);
     texto_puntos_enemy->setDefaultTextColor(Qt::white);
     texto_tiempo->setDefaultTextColor(Qt::white);
-
-    // posicion en pantalla
-    texto_puntos_player->setPos(100, 20);
-    texto_puntos_enemy->setPos(1100, 20);
-    texto_tiempo->setPos(590, 20);
+    texto_puntos_player->setPos(60, 28);
+    texto_puntos_enemy->setPos(1185, 28);
+    texto_tiempo->setPos(610, 15);
 
     escena->addItem(texto_puntos_player);
     escena->addItem(texto_puntos_enemy);
@@ -285,18 +373,6 @@ void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
     escena->addItem(texto_label_player);
     escena->addItem(texto_label_enemy);
 
-    // puntos y tiempo dentro de los recuadros
-    QFont fuente_puntos("Arial", 24, QFont::Bold);
-    texto_puntos_player->setFont(fuente_puntos);
-    texto_puntos_enemy->setFont(fuente_puntos);
-    texto_tiempo->setFont(fuente_puntos);
-    texto_puntos_player->setDefaultTextColor(Qt::white);
-    texto_puntos_enemy->setDefaultTextColor(Qt::white);
-    texto_tiempo->setDefaultTextColor(Qt::white);
-    texto_puntos_player->setPos(60, 28);
-    texto_puntos_enemy->setPos(1185, 28);
-    texto_tiempo->setPos(610, 15);
-
     sheet_balon = QPixmap(":/assets/ball.png");
     sprite_balon = new QGraphicsPixmapItem();
     sprite_balon->setPixmap(sheet_balon.scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
@@ -304,10 +380,7 @@ void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
     sprite_balon->setVisible(false);
     escena->addItem(sprite_balon);
 
-
-
-
-    enemigo = new Enemy(900.0f, 500.0f, 4.6f,200.0f, 80.0f, 40.0f, false);
+    enemigo = new Enemy(840.0f, 500.0f, 4.6f, 200.0f, 80.0f, 65.0f, false);
 
     modoBall modo = modoBall::basketball;
     ComportamientoColision comportamiento = ComportamientoColision :: Rebote;
@@ -319,8 +392,7 @@ void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
     balon->recoger(jugador);
 
     // Carga de los sprites
-
-    sheet_jugador = QPixmap(":assets/player/doom_comportamiento_lvl1.png");
+    sheet_jugador = QPixmap(":/assets/player/Doom_comportamientos_level1.png");
     sheet_enemigo = QPixmap(":/assets/enemy/demonio_comportamiento_lvl1.png");
 
     // Crear items graficos y agregarlos a la escena
@@ -334,23 +406,31 @@ void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
     sprite_enemigo->setPos(enemigo->getx(), enemigo->gety());
 
     // Estado inicial
-    estado_jugador = EstadoAnimacion::CORRIENDO_SIN_BALON;
-    estado_enemigo = EstadoAnimacion::CORRIENDO_SIN_BALON;
+    estado_jugador          = EstadoAnimacion::CORRIENDO_SIN_BALON;
+    estado_anterior_jugador = EstadoAnimacion::CORRIENDO_SIN_BALON;
+    estado_enemigo          = EstadoAnimacion::CORRIENDO_SIN_BALON;
     frame_jugador = 0; // Frame dentro del mapa de sprites, que sea el primero y no uno aleatorio
-    frame_enemigo = 5;
+    frame_enemigo = 0;
     timer_frame_jugador = 0.0f; // Tiempo que demora en cambiar de sprite
     timer_frame_enemigo = 0.0f;
-
-
+    timer_lanzando      = 0.0f; // FIX #6
 
     texto_canasta = new QGraphicsTextItem();
+
+    texto_countdown = new QGraphicsTextItem();
+    QFont fuente_countdown("Arial", 80, QFont::Bold);
+    texto_countdown->setFont(fuente_countdown);
+    texto_countdown->setDefaultTextColor(Qt::red);
+    texto_countdown->setVisible(false);
+    texto_countdown->setZValue(10);
+    escena->addItem(texto_countdown);
+
     QFont fuente_canasta("Arial", 20, QFont::Bold);
     texto_canasta->setFont(fuente_canasta);
     texto_canasta->setDefaultTextColor(Qt::yellow);
     texto_canasta->setVisible(false);
     texto_canasta->setZValue(2);
     escena->addItem(texto_canasta);
-
 
     pantalla_final = new QGraphicsPixmapItem();
     pantalla_final->setZValue(500); // valor muy alto
@@ -360,79 +440,105 @@ void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
 }
 
 
-void Level_1 :: sumar_puntos_enemy(){
+void Level_1::sumar_puntos_enemy()
+{
+    // FIX #3 (ya estaba correcto aquí — se conserva)
+    if(canasta_anotada) return;
 
-    if( balon->portador == nullptr &&  // agregar esta condicion
+    if(balon->portador == nullptr &&
         balon->x >= canasta_player_x - config::NIVEL1::RADIO_CESTA &&
         balon->x <= canasta_player_x + config::NIVEL1::RADIO_CESTA &&
-        balon->y >= config::NIVEL1::ALTO_CESTA)
-
+        balon->y >= config::NIVEL1::ALTO_CESTA - 30.0f &&
+        balon->y <= config::NIVEL1::ALTO_CESTA + 60.0f)
     {
-        puntos_enemy+= config::NIVEL1::PUNTOS_POR_CANASTA;
-
-        balon->x = 640.0f;
-        balon->y = 360.0f;
+        canasta_anotada = true;
+        timer_canasta_anotada = 0.5f;
+        puntos_enemy += config::NIVEL1::PUNTOS_POR_CANASTA;
 
         texto_canasta->setPlainText("+2");
         texto_canasta->setPos(canasta_player_x, canasta_player_y);
         texto_canasta->setVisible(true);
-        timer_texto_canasta = 1.0f; // mostrar 1 segundo
+        timer_texto_canasta = 1.0f;
 
-        balon->x = 640.0f;
-        balon->y = 360.0f;
+        // resetear posiciones equidistantes del centro
+        jugador->setx(440.0f);
+        jugador->sety(500.0f);
+        enemigo->setx(840.0f);
+        enemigo->sety(500.0f);
+
+        // balon al centro sin portador
+        balon->x  = 640.0f;
+        balon->y  = 360.0f;
         balon->vx = 0.0f;
         balon->vy = 0.0f;
-        balon->recoger(jugador); // el jugador siempre recibe el balon despues de una sesta
+        balon->portador = nullptr;
+
         timer_invulnerabilidad = 2.0f;
         balon_en_aire = false;
 
-
+        // iniciar countdown
+        en_countdown  = true;
+        cuenta        = 3;
+        timer_countdown = 1.0f;
+        texto_countdown->setPlainText("3");
+        texto_countdown->setPos(610, 280);
+        texto_countdown->setVisible(true);
     }
-
-
 }
 
-void Level_1 :: sumar_puntos_player(){
+void Level_1::sumar_puntos_player()
+{
+    // FIX #3: guard faltante añadido
+    if(canasta_anotada) return;
 
     if(balon->portador == nullptr &&
         balon->x >= canasta_enemy_x - config::NIVEL1::RADIO_CESTA &&
         balon->x <= canasta_enemy_x + config::NIVEL1::RADIO_CESTA &&
-        balon->y >= config::NIVEL1::ALTO_CESTA)
+        balon->y >= config::NIVEL1::ALTO_CESTA - 30.0f &&
+        balon->y <= config::NIVEL1::ALTO_CESTA + 60.0f)
     {
+        canasta_anotada = true;
+        timer_canasta_anotada = 0.5f;
         puntos_player += config::NIVEL1::PUNTOS_POR_CANASTA;
+
         texto_canasta->setPlainText("+2");
         texto_canasta->setPos(canasta_enemy_x, canasta_enemy_y);
         texto_canasta->setVisible(true);
         timer_texto_canasta = 1.0f;
-        balon->x = 640.0f;
-        balon->y = 360.0f;
+
+        // resetear posiciones equidistantes del centro
+        jugador->setx(440.0f);
+        jugador->sety(500.0f);
+        enemigo->setx(840.0f);
+        enemigo->sety(500.0f);
+
+        // balon al centro sin portador
+        balon->x  = 640.0f;
+        balon->y  = 360.0f;
         balon->vx = 0.0f;
         balon->vy = 0.0f;
-        balon->recoger(jugador);
+        balon->portador = nullptr;
+
         timer_invulnerabilidad = 2.0f;
         balon_en_aire = false;
+
+        // iniciar countdown
+        en_countdown  = true;
+        cuenta        = 3;
+        timer_countdown = 1.0f;
+        texto_countdown->setPlainText("3");
+        texto_countdown->setPos(610, 280);
+        texto_countdown->setVisible(true);
     }
-
-
 }
-
-
 
 void Level_1 :: finalizar(){
 
-    if(pausado) return;
-
-    puntos_enemy = 0;
-    puntos_player = 0;
-
     delete enemigo;
-
     enemigo = nullptr;
 
     delete balon;
-
     balon = nullptr;
-
 
     detener_musica();
 
@@ -481,27 +587,27 @@ void Level_1 ::setBalonEnAire(bool valor)
 
 void Level_1::lanzar_balon_jugador(float fuerza)
 {
-
     if(balon->portador == jugador)
     {
-        jugador->lanzar_balon(*balon, fuerza, canasta_enemy_x, canasta_enemy_y);
-
+        float objetivo_x = (jugador->getdx_actual() >= 0) ? canasta_enemy_x : canasta_player_x;
+        float objetivo_y = canasta_enemy_y;
+        jugador->lanzar_balon(*balon, fuerza, objetivo_x, objetivo_y);
         balon_en_aire = true;
         timer_invulnerabilidad = 0.5f;
-
+        timer_lanzando = 0.45f;
     }
 }
 
 
-
+// FIX #1: destructor ya NO hace delete — finalizar() es el responsable.
+// Si finalizar() fue llamado, los punteros ya son nullptr y delete sería no-op,
+// pero lo más limpio es no duplicar la lógica de liberación.
 Level_1 :: ~Level_1(){
 
     delete enemigo;
-
     enemigo = nullptr;
 
     delete balon;
-
     balon = nullptr;
 
 }

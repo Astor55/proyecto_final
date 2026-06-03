@@ -16,8 +16,8 @@ enum class modoBall : unsigned char
 enum class ComportamientoColision : unsigned char
 {
 
-  Rebote, //rebota y pierde energia hasta romperse
-  Roto    //se rompe al primer impacto con el borde
+    Rebote, //rebota y pierde energia hasta romperse
+    Roto    //se rompe al primer impacto con el borde
 
 };
 
@@ -107,7 +107,7 @@ public:
     static constexpr float Coef_rebote = config::FISICAS::COEF_REBOTE;
     static constexpr float Perdida_energia = 0.65f;
     static constexpr float Vel_minima = config::FISICAS::VEL_MINIMA;
-    static constexpr float Radio_colision = 24.0f;
+    static constexpr float Radio_colision = 60.0f;
     static constexpr float OFFSET_X = 20.0f;
     static constexpr float OFFSET_Y = 10.0f;
 

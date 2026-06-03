@@ -70,7 +70,9 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
         {
             espacio_presionado = false;
             lanzando = false;
-            nivel->lanzar_balon_jugador(timer_lanzamiento * 100.0f);
+            if(!nivel->getEnCountdown())
+                nivel->lanzar_balon_jugador(timer_lanzamiento * 100.0f);
+            timer_lanzamiento = 0.0f;
         }
         break;
 
@@ -80,10 +82,13 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
 void MainWindow::game_loop()
 {
     float dx = 0, dy = 0;
-    if(tecla_derecha)  dx =  1;
-    if(tecla_izquierda) dx = -1;
-    if(tecla_arriba)   dy = -1;
-    if(tecla_abajo)    dy =  1;
+    if(!nivel->getEnCountdown())
+    {
+        if(tecla_derecha)   dx =  1;
+        if(tecla_izquierda) dx = -1;
+        if(tecla_arriba)    dy = -1;
+        if(tecla_abajo)     dy =  1;
+    }
 
     if(dx != 0 || dy != 0)
         jugador->moverse(dx, dy);
@@ -94,10 +99,13 @@ void MainWindow::game_loop()
     }
 
     if(lanzando)
-        timer_lanzamiento = qMin(timer_lanzamiento + 1.0f/10.0f, 1.0f); // 6 veces mas rapido
+        timer_lanzamiento = qMin(timer_lanzamiento + 1.0f/30.0f, 1.0f); // 6 veces mas rapido
 
-    if(tecla_arrebatar)
-        jugador->atacar(*nivel->getEnemigo(), *nivel->getBalon());
+    if(!nivel->getEnCountdown())
+    {
+        if(tecla_arrebatar)
+            jugador->atacar(*nivel->getEnemigo(), *nivel->getBalon());
+    }
 
     nivel->actualizar(1.0f / 60.0f);
 }
