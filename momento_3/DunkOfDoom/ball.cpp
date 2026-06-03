@@ -200,6 +200,7 @@ void Ball::verificar_colision_paredes(float ancho, float alto)
 
     if (modo == modoBall::basketball)
     {
+
         if (x <= RADIO)
         {
             x = RADIO;
@@ -211,9 +212,10 @@ void Ball::verificar_colision_paredes(float ancho, float alto)
             x = ancho - RADIO; vx = -std::abs(vx) * Coef_rebote;
         }
 
-        if (y >= alto - RADIO)
+        static constexpr float SUELO_JUEGO = 600.0f;
+        if (y >= SUELO_JUEGO - RADIO)
         {
-            y = alto - RADIO;
+            y = SUELO_JUEGO - RADIO;
 
             en_suelo = true;
 

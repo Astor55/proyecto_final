@@ -7,61 +7,59 @@ class Ball;
 class character
 {
 
-    protected: //Protected para poder ser heredados por sus clases derivadas
+protected: //Protected para poder ser heredados por sus clases derivadas
 
-        // Atributos
+    // Atributos
 
-        float x;
-        float y;
-        float velocidad;
-        float vida;
-        float fuerza;
-        float rango_ataque; // Se refiere al rango que tiene cada personaje para atacar
-        float dx_actual;
-        float dy_actual;
-        float timer_inmovilizacion = 0.0f;
-        float velocidad_base       = 200.0f;
-        float boost_timer          = 0.0f;
+    float x;
+    float y;
+    float velocidad;
+    float vida;
+    float fuerza;
+    float rango_ataque; // Se refiere al rango que tiene cada personaje para atacar
+    float dx_actual;
+    float dy_actual;
+    float timer_inmovilizacion = 0.0f;
+    float velocidad_base       = 200.0f;
+    float boost_timer          = 0.0f;
 
-        Ball* balon;
+    bool en_suelo;
+    bool inmovilizado = false;
+    bool flash_verde_activo = false;
 
-        bool en_suelo;
-        bool inmovilizado = false;
-        bool flash_verde_activo = false;
+public:
 
-    public:
+    character(float _x, float _y, float _velocidad,float _vida, float _fuerza,float _rango_ataque, bool _en_suelo);
 
-        character(float _x, float _y, float _velocidad,float _vida, float _fuerza,float _rango_ataque, bool _en_suelo);
+    // Metodos
 
-        // Metodos
+    virtual void moverse(float dx, float dy) = 0; // Especificador para el compilador que obliga a las clases derivadas a implementarlo
+    virtual void atacar(character& objetivo, Ball& bal) {}
 
-        virtual void moverse(float dx, float dy) = 0; // Especificador para el compilador que obliga a las clases derivadas a implementarlo
-        virtual void atacar(character& objetivo, Ball& bal) {}
+    void modificar_vida(float cantidad);
+    float get_x()const {return x;}
+    float get_y()const {return y;}
 
-        void modificar_vida(float cantidad);
-        float get_x()const {return x;}
-        float get_y()const {return y;}
+    virtual ~character() = default; // Default, le dice al compilador que genere este metodo automaticamente
 
-        virtual ~character() = default; // Default, le dice al compilador que genere este metodo automaticamente
+    // Getters
 
-        // Getters
+    float getx() const;
+    float gety() const;
+    float getvelocidad() const;
+    float getvida() const;
+    float getfuerza() const;
+    bool getensuelo() const;
+    float getdx_actual() const;
+    float getdy_actual() const;
+    float getrango_ataque() const;
 
-        float getx() const;
-        float gety() const;
-        float getvelocidad() const;
-        float getvida() const;
-        float getfuerza() const;
-        bool getensuelo() const;
-        float getdx_actual() const;
-        float getdy_actual() const;
-        float getrango_ataque() const;
+    // Setters
 
-        // Setters
-
-        void setx(float num);
-        void sety(float num);
-        void setdx(float num);
-        void setdy(float num);
+    void setx(float num);
+    void sety(float num);
+    void setdx(float num);
+    void setdy(float num);
 
 
 

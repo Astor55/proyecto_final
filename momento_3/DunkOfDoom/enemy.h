@@ -12,7 +12,8 @@ enum Decision : unsigned char
     ALEJARSE,
     LANZAR,
     ARREBATAR,
-    RECOGER
+    RECOGER,
+    AVANZAR_CON_BALON
 };
 
 class Enemy : public character
@@ -28,6 +29,9 @@ class Enemy : public character
     const float rango_minimo = 30.0f;
     bool acaba_de_lanzar = false;
     float timer_acaba_lanzar = 0.0f;
+    float cooldown_robo = 0.0f;
+    static constexpr float DELAY_ROBO = 1.5f; // segundos entre robos
+    float distancia_a_canasta = 0.0f;
 
 
 
@@ -45,7 +49,7 @@ class Enemy : public character
 
 
         // Ciclo del agente inteligente
-        void percepcion(character& jugador, Ball& balon, float dt); // Lee el estado del entorno (posición del jugador, balón, etc.)
+        void percepcion(character& jugador, Ball& balon, float dt, float canasta_x, float canasta_y); // Lee el estado del entorno (posición del jugador, balón, etc.)
         void razonamiento(); // Decide qué acción tomar según lo percibido
         void accion(character& jugador, Ball& balon, float canasta_x, float canasta_y, float timer_inv); // Ejecuta la decisión (moverse, lanzar, arrebatar)
         void aprendizaje(unsigned short puntos_player, unsigned short puntos_enemy); // Ajusta comportamiento según resultados

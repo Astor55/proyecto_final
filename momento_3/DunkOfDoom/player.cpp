@@ -39,11 +39,26 @@ void player::lanzar_balon(Ball &balon, float fuerza, float canasta_x, float cana
 {
     float dx = canasta_x - x;
     float dy = canasta_y - y;
-    float angulo = atan2(dy, dx);
-    balon.lanzar(fuerza, angulo);
-    // proporcional a la fuerza del lanzamiento
-    balon.vx = fuerza * 4.0f;
-    balon.vy = -fuerza * 3.0f; // hacia arriba
+    float distancia = sqrt(dx*dx + dy*dy);
+
+    float t = fuerza / 100.0f; // 0..1 según carga del lanzamiento
+
+    // La velocidad horizontal es proporcional a la distancia a la canasta.
+    // Más lejos → necesita más carga para llegar. Cerca se puede tirar con poca carga.
+    // Rango efectivo de tiro: ~200-400px de distancia con carga máxima.
+    float speed_h = (distancia / 600.0f) * (350.0f + t * 450.0f);
+
+    if(distancia > 0)
+        balon.vx = (dx / distancia) * speed_h;
+    else
+        balon.vx = 0.0f;
+
+    // Componente vertical: fija para garantizar arco mínimo, aumenta con carga
+    balon.vy = -(500.0f + t * 200.0f);
+
+    balon.activa   = true;
+    balon.en_suelo = false;
+    balon.portador = nullptr;
 }
 
 
@@ -73,4 +88,29 @@ void player::activar_flash_verde()
     flash_verde_activo = true;
 
 }
+
+
+void player::actualizar(float dt)
+{
+    if(inmovilizado)
+    {
+        timer_inmovilizacion -= dt;
+        if(timer_inmovilizacion <= 0.0f)
+        {
+            inmovilizado = false;
+            timer_inmovilizacion = 0.0f;
+        }
+    }
+
+    if(boost_timer > 0.0f)
+    {
+        boost_timer -= dt;
+        if(boost_timer <= 0.0f)
+        {
+            velocidad = velocidad_base;
+            boost_timer = 0.0f;
+        }
+    }
+}
+
 
