@@ -18,7 +18,6 @@ static constexpr float DELTA_TIME = 1.0F / FPS_TARGET;
 // -----------
 namespace FACIL
 {
-
 static constexpr float VIDA_JUGADOR       = 150.0f;
 static constexpr float DAÑO_PROYECTIL     = 20.0f;
 static constexpr float CURACION_POWERUP   = 20.0f;
@@ -27,12 +26,11 @@ static constexpr int   HISTORIAL_IA       = 2;
 static constexpr float INTERVALO_ATAQUE   = 3.0f;
 static constexpr float VEL_PROYECTIL      = 3.0f;
 static constexpr float TELEGRAPH          = 0.5f;
-
+static constexpr float DAÑO_LAVA          = 10.0f;
 }
 
 namespace DIFICIL
 {
-
 static constexpr float VIDA_JUGADOR       = 100.0f;
 static constexpr float DAÑO_PROYECTIL     = 25.0f;
 static constexpr float CURACION_POWERUP   = 18.75f;
@@ -41,8 +39,9 @@ static constexpr int   HISTORIAL_IA       = 8;
 static constexpr float INTERVALO_ATAQUE   = 1.5f;
 static constexpr float VEL_PROYECTIL      = 6.0f;
 static constexpr float TELEGRAPH          = 0.1f;
-
+static constexpr float DAÑO_LAVA          = 10.0f;
 }
+
 
 // --------
 // Nivel 1
