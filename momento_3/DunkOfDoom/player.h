@@ -1,20 +1,17 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "character.h"
 
+#include "character.h"
 
 class player : public character
 {
-
 public:
 
-    player(float _x, float _y, float _velocidad, float _vida, float _fuerza, float _rango_ataque, bool _en_suelo)
-        : character(_x, _y, _velocidad, _vida, _fuerza, _rango_ataque, _en_suelo)
-<<<<<<< HEAD
-        {
-=======
+    player(float _x, float _y, float _velocidad, float _vida,
+           float _fuerza, float _rango_ataque, bool _en_suelo)
+        : character(_x, _y, _velocidad, _vida,
+                    _fuerza, _rango_ataque, _en_suelo)
     {
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
         // Implementacion del constructor en el .h debido a lo simple que es
     }
 
@@ -32,13 +29,13 @@ public:
 
     void activar_flash_verde();
 
-    void resetear_direccion() { dx_actual = 0.0f; dy_actual = 0.0f; }
+    void resetear_direccion()
+    {
+        dx_actual = 0.0f;
+        dy_actual = 0.0f;
+    }
 
     void actualizar(float dt);
-
-        void resetear_direccion() { dx_actual = 0.0f; dy_actual = 0.0f; }
-
-        void actualizar(float dt);
-
 };
+
 #endif // PLAYER_H

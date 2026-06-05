@@ -16,7 +16,7 @@ Obstacle::Obstacle(float x, float y,
 
 
 
-//colision AABB
+//colision AABB (verifica las colisiones entre los objetos)
 bool Obstacle::colisiona_con(float px, float py,
                              float pradio) const
 {

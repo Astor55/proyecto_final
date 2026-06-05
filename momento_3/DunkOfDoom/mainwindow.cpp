@@ -7,10 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-<<<<<<< HEAD
 
-=======
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
     escena = new QGraphicsScene(this);
     escena->setSceneRect(0, 0, 1280, 720);
     this->setFixedSize(1280, 720);
@@ -19,42 +16,54 @@ MainWindow::MainWindow(QWidget *parent)
     vista->setFixedSize(1280, 720);
     vista->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     vista->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-<<<<<<< HEAD
     vista->setRenderHint(QPainter::Antialiasing, false);
     vista->setRenderHint(QPainter::SmoothPixmapTransform, false);
     setCentralWidget(vista);
 
-    // Por ahora arranca level_2 — la clase juego decidirá cuál cargar
-    jugador = new player(640.0f, 360.0f, 200.0f, 150.0f, 80.0f, 40.0f, false);
-    nivel   = new Level_2(es_dificil);
-    nivel->inicializacion(jugador, escena);
-    nivel->set_volumen(volumen_global);
-=======
-    setCentralWidget(vista);
-
-    jugador = new player(200.0f, 500.0f, 5.0f, 100.0f, 50.0f, 60.0f, false);
-
-    nivel = new Level_1();
-    nivel->inicializacion(jugador, escena);
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
+    juego = new Juego(escena, volumen_global);
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::game_loop);
     timer->start(1000 / 60);
-}
 
+}
 
 MainWindow::~MainWindow()
 {
+    delete juego;
     delete nivel;
     delete jugador;
     delete ui;
-<<<<<<< HEAD
-    if(musica_final) musica_final->stop();
+    if(musica_final)
+    {
+        musica_final->stop();
+        delete musica_final;
+        musica_final = nullptr;
+    }
+    if(audio_final)
+    {
+        delete audio_final;
+        audio_final = nullptr;
+    }
 }
+
 
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
+    // Input del menú
+    if(estado_app == EstadoApp::MENU)
+    {
+        switch(event->key())
+        {
+        case Qt::Key_Return:
+        case Qt::Key_Space: juego->confirmar();  break;
+        case Qt::Key_Escape: juego->volver();    break;
+        default: break;
+        }
+        return;
+    }
+
+    // Input del juego
     switch(event->key())
     {
     case Qt::Key_D: tecla_derecha   = true; break;
@@ -79,13 +88,13 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 
     case Qt::Key_Plus:
         volumen_global = qMin(1.0f, volumen_global + 0.1f);
-        nivel->set_volumen(volumen_global);
+        if(nivel) nivel->set_volumen(volumen_global);
         if(musica_final) audio_final->setVolume(volumen_global);
         break;
 
     case Qt::Key_Minus:
         volumen_global = qMax(0.0f, volumen_global - 0.1f);
-        nivel->set_volumen(volumen_global);
+        if(nivel) nivel->set_volumen(volumen_global);
         if(musica_final) audio_final->setVolume(volumen_global);
         break;
     }
@@ -93,6 +102,8 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 
 void MainWindow::keyReleaseEvent(QKeyEvent* event)
 {
+    if(estado_app == EstadoApp::MENU) return;
+
     switch(event->key())
     {
     case Qt::Key_D: tecla_derecha   = false; break;
@@ -106,7 +117,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
         {
             espacio_presionado = false;
             lanzando           = false;
-            if(!nivel->getEnCountdown())
+            if(nivel && !nivel->getEnCountdown())
                 nivel->lanzar_balon_jugador(timer_lanzamiento * 100.0f);
             timer_lanzamiento = 0.0f;
         }
@@ -114,38 +125,45 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
     }
 }
 
+
 void MainWindow::mousePressEvent(QMouseEvent* event)
 {
+
+    if(estado_app == EstadoApp::MENU)
+    {
+
+        juego->click(event->pos().x(), event->pos().y());
+        return;
+
+    }
+
     if(pausado)
     {
+
         QPointF pos = event->pos();
 
         if(txt_reanudar && txt_reanudar->sceneBoundingRect().contains(pos))
         {
+
             ocultar_pausa();
             return;
+
         }
 
         if(txt_reintentar_p && txt_reintentar_p->sceneBoundingRect().contains(pos))
         {
-            ocultar_pausa();
-            if(musica_final) musica_final->stop();
-            escena->clear();
-            delete nivel; delete jugador;
-            jugador = new player(640.0f, 360.0f, 200.0f, 150.0f, 80.0f, 40.0f, false);
-            nivel   = new Level_2(es_dificil);
-            nivel->inicializacion(jugador, escena);
-            nivel->set_volumen(volumen_global);
-            estado_juego    = EstadoJuego::JUGANDO;
-            esperando_final = false;
-            timer->start(1000 / 60);
+
+            reiniciar_nivel();
             return;
+
         }
 
         if(txt_menu_p && txt_menu_p->sceneBoundingRect().contains(pos))
         {
-            close();
+
+            ir_al_menu();
             return;
+
         }
     }
 
@@ -154,21 +172,54 @@ void MainWindow::mousePressEvent(QMouseEvent* event)
     QPointF pos = event->pos();
 
     if(btn_reintentar && btn_reintentar->rect().contains(pos))
-    {
-        limpiar_pantalla_final();
-        if(musica_final) musica_final->stop();
-        delete nivel; delete jugador;
-        escena->clear();
-        jugador = new player(640.0f, 360.0f, 200.0f, 150.0f, 80.0f, 40.0f, false);
-        nivel   = new Level_2(es_dificil);
-        nivel->inicializacion(jugador, escena);
-        nivel->set_volumen(volumen_global);
-        estado_juego = EstadoJuego::JUGANDO;
-        timer->start(1000 / 60);
-    }
+        reiniciar_nivel();
 
     if(btn_menu && btn_menu->rect().contains(pos))
-        close();
+        ir_al_menu();
+
+}
+
+void MainWindow::reiniciar_nivel()
+{
+
+    ocultar_pausa();
+    limpiar_pantalla_final();
+    if(musica_final) musica_final->stop();
+
+    escena->clear();
+    delete nivel;   nivel   = nullptr;
+    delete jugador; jugador = nullptr;
+
+    juego->reiniciar(escena);
+
+    jugador = juego->get_jugador();
+    nivel   = juego->get_nivel();
+    juego->transferir_ownership();
+
+    nivel->inicializacion(jugador, escena);
+    nivel->set_volumen(volumen_global);
+
+    estado_juego    = EstadoJuego::JUGANDO;
+    esperando_final = false;
+    timer->start(1000 / 60);
+
+}
+
+void MainWindow::ir_al_menu()
+{
+    ocultar_pausa();
+    limpiar_pantalla_final();
+    if(musica_final) musica_final->stop();
+
+    escena->clear();
+    delete nivel;   nivel   = nullptr;
+    delete jugador; jugador = nullptr;
+
+    juego->mostrar_pantalla_principal();
+    estado_app   = EstadoApp::MENU;
+    estado_juego = EstadoJuego::JUGANDO;
+    esperando_final = false;
+    timer->start(1000 / 60);
 }
 
 void MainWindow::limpiar_pantalla_final()
@@ -185,7 +236,11 @@ void MainWindow::mostrar_pantalla_final(bool gano)
     timer->stop();
     reproducir_musica_final(gano);
 
-    QPixmap px(gano ? config::Assets::VICTORY2 : config::Assets::GAME_OVER2);
+    QString img = gano
+                      ? (juego->es_nivel1() ? config::Assets::VICTORY1 : config::Assets::VICTORY2)
+                      : (juego->es_nivel1() ? config::Assets::GAME_OVER1 : config::Assets::GAME_OVER2);
+
+    QPixmap px(img);
     px = px.scaled(1280, 720, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     fondo_final = escena->addPixmap(px);
     fondo_final->setZValue(10);
@@ -237,15 +292,16 @@ void MainWindow::mostrar_pausa()
 
 void MainWindow::ocultar_pausa()
 {
+    if(!pausado) return;
     pausado = false;
-    nivel->reanudar();
+    if(nivel) nivel->reanudar();
 
     if(overlay_pausa)    { escena->removeItem(overlay_pausa);    delete overlay_pausa;    overlay_pausa    = nullptr; }
     if(txt_reanudar)     { escena->removeItem(txt_reanudar);     delete txt_reanudar;     txt_reanudar     = nullptr; }
     if(txt_reintentar_p) { escena->removeItem(txt_reintentar_p); delete txt_reintentar_p; txt_reintentar_p = nullptr; }
     if(txt_menu_p)       { escena->removeItem(txt_menu_p);       delete txt_menu_p;       txt_menu_p       = nullptr; }
 
-    nivel->subir_volumen(0.7f);
+    if(nivel) nivel->subir_volumen(0.7f);
     timer->start(1000 / 60);
 }
 
@@ -266,6 +322,30 @@ void MainWindow::reproducir_musica_final(bool gano)
 
 void MainWindow::game_loop()
 {
+    // ── MENÚ ────────────────────────────────────────────────
+    if(estado_app == EstadoApp::MENU)
+    {
+
+        juego->actualizar_menu();
+
+        if(juego->listo_para_jugar())
+        {
+            jugador  = juego->get_jugador();
+            nivel    = juego->get_nivel();
+            juego->transferir_ownership(); // null a los punteros para evitar doble delete
+            juego->detener_musica_menu();
+            juego->limpiar_menu();
+            nivel->inicializacion(jugador, escena);
+            nivel->set_volumen(volumen_global);
+            estado_app   = EstadoApp::JUGANDO_NIVEL;
+            estado_juego = EstadoJuego::JUGANDO;
+        }
+
+        return;
+
+    }
+
+    // ── JUGANDO ──────────────────────────────────────────────
     if(estado_juego != EstadoJuego::JUGANDO) return;
 
     float dx = 0, dy = 0;
@@ -278,24 +358,16 @@ void MainWindow::game_loop()
         if(tecla_abajo)     dy =  1;
     }
 
-    // normalizar diagonal
-    if(dx != 0 && dy != 0)
-    {
-        dx *= 0.707f;
-        dy *= 0.707f;
-    }
+    if(dx != 0 && dy != 0) { dx *= 0.707f; dy *= 0.707f; }
 
-    if(dx != 0 || dy != 0)
-        jugador->moverse(dx, dy);
-    else
-        jugador->resetear_direccion();
+    if(dx != 0 || dy != 0) jugador->moverse(dx, dy);
+    else                    jugador->resetear_direccion();
 
-    // acción level_1
     if(!nivel->getEnCountdown() && tecla_arrebatar)
         jugador->atacar(*nivel->getEnemigo(), *nivel->getBalon());
 
     if(lanzando)
-        timer_lanzamiento = qMin(timer_lanzamiento + 1.0f/30.0f, 1.0f);
+        timer_lanzamiento = qMin(timer_lanzamiento + 1.0f / 30.0f, 1.0f);
 
     nivel->actualizar(config::DELTA_TIME);
 
@@ -318,83 +390,5 @@ void MainWindow::game_loop()
             mostrar_pantalla_final(gano_nivel);
         }
     }
-=======
-
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
-}
-
-void MainWindow::keyPressEvent(QKeyEvent* event)
-{
-    switch(event->key())
-    {
-    case Qt::Key_D: tecla_derecha = true; break;
-    case Qt::Key_A: tecla_izquierda = true; break;
-    case Qt::Key_W: tecla_arriba = true; break;
-    case Qt::Key_S: tecla_abajo = true; break;
-    case Qt::Key_E:     tecla_arrebatar = true; break;
-    case Qt::Key_Space:
-        if(!espacio_presionado && !event->isAutoRepeat())
-        {
-            espacio_presionado = true;
-            lanzando = true;
-            timer_lanzamiento = 0.0f;
-        }
-        break;
-
-    }
-}
-
-void MainWindow::keyReleaseEvent(QKeyEvent* event)
-{
-    switch(event->key())
-    {
-    case Qt::Key_D: tecla_derecha = false; break;
-    case Qt::Key_A: tecla_izquierda = false; break;
-    case Qt::Key_W: tecla_arriba = false; break;
-    case Qt::Key_S: tecla_abajo = false; break;
-    case Qt::Key_E:     tecla_arrebatar = false; break;
-    case Qt::Key_Space:
-        if(!event->isAutoRepeat() && espacio_presionado)
-        {
-            espacio_presionado = false;
-            lanzando = false;
-            if(!nivel->getEnCountdown())
-                nivel->lanzar_balon_jugador(timer_lanzamiento * 100.0f);
-            timer_lanzamiento = 0.0f;
-        }
-        break;
-
-    }
-}
-
-void MainWindow::game_loop()
-{
-    float dx = 0, dy = 0;
-    if(!nivel->getEnCountdown())
-    {
-        if(tecla_derecha)   dx =  1;
-        if(tecla_izquierda) dx = -1;
-        if(tecla_arriba)    dy = -1;
-        if(tecla_abajo)     dy =  1;
-    }
-
-    if(dx != 0 || dy != 0)
-        jugador->moverse(dx, dy);
-    else
-    {
-        jugador->setdx(0);
-        jugador->setdy(0);
-    }
-
-    if(lanzando)
-        timer_lanzamiento = qMin(timer_lanzamiento + 1.0f/30.0f, 1.0f); // 6 veces mas rapido
-
-    if(!nivel->getEnCountdown())
-    {
-        if(tecla_arrebatar)
-            jugador->atacar(*nivel->getEnemigo(), *nivel->getBalon());
-    }
-
-    nivel->actualizar(1.0f / 60.0f);
 }
 

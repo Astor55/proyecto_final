@@ -96,6 +96,7 @@ void Level_2::inicializacion(player* p, QGraphicsScene* escena)
 {
 
     jugador = p;
+    jugador->set_velocidad(config::NIVEL2::VEL_JUGADOR);
     this->escena = escena;
 
     //fondo

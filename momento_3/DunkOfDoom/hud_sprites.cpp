@@ -66,9 +66,8 @@ HudSprites::HudSprites(QGraphicsScene* escena,
             Qt::FastTransformation));
 }
 
-// ─────────────────────────────────────────
+
 // Cargar sprites
-// ─────────────────────────────────────────
 void HudSprites::cargar_sprites() {
     QPixmap sheet_jug(config::Assets::BARRA_PLAYER);
     QPixmap sheet_boss(config::Assets::BARRA_BOSS);
@@ -83,9 +82,8 @@ void HudSprites::cargar_sprites() {
     }
 }
 
-// ─────────────────────────────────────────
+
 // Actualizar HUD completo
-// ─────────────────────────────────────────
 void HudSprites::actualizar(float vida_jugador, float vida_max_jugador,
                             float vida_boss,    float vida_max_boss,
                             float tiempo_restante) {
@@ -110,9 +108,8 @@ void HudSprites::actualizar(float vida_jugador, float vida_max_jugador,
         texto_timer->setDefaultTextColor(Qt::white);
 }
 
-// ─────────────────────────────────────────
+
 // Actualizar barra individual
-// ─────────────────────────────────────────
 void HudSprites::actualizar_barra(QGraphicsPixmapItem* marco,
                                   QGraphicsRectItem*   relleno,
                                   float vida, float vida_max,

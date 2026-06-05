@@ -1,22 +1,18 @@
 QT       += core gui multimedia
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
-
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
 SOURCES += \
     ballsprites.cpp \
     boss_sprites.cpp \
     hud_sprites.cpp \
+    juego.cpp \
     lavasprites.cpp \
     level.cpp \
-<<<<<<< HEAD
-    level_2.cpp \
-=======
     level_1.cpp \
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
+    level_2.cpp \
     main.cpp \
     mainwindow.cpp \
     ball.cpp \
@@ -37,13 +33,11 @@ HEADERS += \
     boss_sprites.h \
     config.h \
     hud_sprites.h \
+    juego.h \
     lavasprites.h \
     level.h \
-<<<<<<< HEAD
-    level_2.h \
-=======
     level_1.h \
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
+    level_2.h \
     mainwindow.h \
     ball.h \
     character.h \
@@ -67,16 +61,11 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-
-
 win32 {
     DESTDIR = $$OUT_PWD
-
     assets.path  = $$DESTDIR/assets
     assets.files = $$PWD/assets/*
     INSTALLS += assets
-
-    # Copiar en cada build
     copyassets.commands = xcopy /E /I /Y \"$$shell_path($$PWD/assets)\" \"$$shell_path($$DESTDIR/assets)\"
     first.depends = $(first) copyassets
     export(first.depends)
