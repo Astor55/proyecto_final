@@ -18,15 +18,14 @@ void Enemy::moverse(float dx, float dy)
     if(y > 600)  y = 600;
 }
 
-<<<<<<< HEAD
-=======
 void Enemy::quitar(character& objetivo, Ball& balon)
 {
-    if(cooldown_robo > 0) return;
+    if(cooldown_robo > 0)
+        return;
 
     float dx = objetivo.get_x() - x;
     float dy = objetivo.get_y() - y;
-    float distancia = sqrt((dx*dx) + (dy*dy));
+    float distancia = sqrt((dx * dx) + (dy * dy));
 
     if(distancia <= rango_ataque && balon.portador == &objetivo)
     {
@@ -34,7 +33,6 @@ void Enemy::quitar(character& objetivo, Ball& balon)
         cooldown_robo = DELAY_ROBO;
     }
 }
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
 
 void Enemy::percepcion(character& jugador, Ball& balon, float dt, float canasta_x, float canasta_y)
 {

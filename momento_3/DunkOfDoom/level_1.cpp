@@ -80,7 +80,7 @@ void Level_1::actualizar(float dt)
             texto_canasta->setVisible(false);
     }
 
-    // FIX #6: timer de animación LANZANDO: vuelve al estado normal al terminar
+    // timer de animación LANZANDO: vuelve al estado normal al terminar
     if(timer_lanzando > 0.0f)
     {
         timer_lanzando -= dt;
@@ -148,8 +148,13 @@ void Level_1::actualizar(float dt)
         enemigo->setdy(0);
     }
 
+    // limitar dentro de la pantalla
+    if(jugador->get_x() < 150)  jugador->setx(150);
+    if(jugador->get_x() > 1045) jugador->setx(1045);
+    if(jugador->get_y() < 350)  jugador->sety(350);
+    if(jugador->get_y() > 600)  jugador->sety(600);
+
     // ── ESTADOS DE ANIMACION ─────────────────────────────────
-    // FIX #6: LANZANDO tiene prioridad mientras el timer esté activo
     if(timer_lanzando > 0.0f)
     {
         estado_jugador = EstadoAnimacion::LANZANDO;
@@ -226,8 +231,6 @@ void Level_1::actualizar(float dt)
 
     // ── JUGADOR ──────────────────────────────────────────────
     // Escalamos a 160px de alto (más grande, se ve mejor en cancha 1280x720)
-    // Offsets de pies medidos con precisión pixel por fila (escalado a 160px alto):
-    // Filas 0-3: pies en 159px. Fila 4 (IDLE, contenido más corto): pies en 104px.
     static constexpr int JUGADOR_DEST_H = 100;
     static constexpr int JUGADOR_DEST_W = 100;
 
@@ -254,8 +257,6 @@ void Level_1::actualizar(float dt)
                            jugador->gety() - JUGADOR_DEST_H);
 
     // ── ENEMIGO ──────────────────────────────────────────────
-    // Offsets de pies medidos con precisión por fila (escalado a 120px alto):
-    // Fila 0: 111, Fila 1: 106, Fila 2: 119, Fila 3: 103
     static constexpr int ENEMIGO_DEST_H = 120;
     static constexpr int ENEMIGO_DEST_W = 120;
     static constexpr int ENEMIGO_OFFSET_PIES[4] = {111, 106, 119, 103};
@@ -299,7 +300,7 @@ void Level_1::actualizar(float dt)
 
 void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
 
-    iniciar_musica(config::Assets::MUSIC_LEVEL1);
+    iniciar_musica(config::Assets::MUSICA_NIVEL1);
 
     // fondo - se agrega primero para que quede detras de todo
     QPixmap fondo(":/assets/sprites/level1.doom.png");
@@ -310,6 +311,7 @@ void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
 
 
     jugador = p;
+    jugador->set_velocidad(config::NIVEL1::VEL_JUGADOR);
     this->escena = escena;
 
     canasta_player_x = 145;
@@ -323,12 +325,11 @@ void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
     jugador->setx(440.0f);
     jugador->sety(500.0f);
 
-    // FIX #2: crear texto_puntos_player antes de usarlo
+    // crear texto_puntos_player antes de usarlo
     texto_puntos_player = new QGraphicsTextItem();
     texto_puntos_enemy  = new QGraphicsTextItem();
     texto_tiempo        = new QGraphicsTextItem();
 
-    // FIX #4: una sola asignación de estilo y posición (eliminado el bloque duplicado más abajo)
     QFont fuente_puntos("Arial", 24, QFont::Bold);
     texto_puntos_player->setFont(fuente_puntos);
     texto_puntos_enemy->setFont(fuente_puntos);
@@ -413,7 +414,7 @@ void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
     frame_enemigo = 0;
     timer_frame_jugador = 0.0f; // Tiempo que demora en cambiar de sprite
     timer_frame_enemigo = 0.0f;
-    timer_lanzando      = 0.0f; // FIX #6
+    timer_lanzando      = 0.0f;
 
     texto_canasta = new QGraphicsTextItem();
 
@@ -442,7 +443,7 @@ void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
 
 void Level_1::sumar_puntos_enemy()
 {
-    // FIX #3 (ya estaba correcto aquí — se conserva)
+
     if(canasta_anotada) return;
 
     if(balon->portador == nullptr &&
@@ -488,7 +489,7 @@ void Level_1::sumar_puntos_enemy()
 
 void Level_1::sumar_puntos_player()
 {
-    // FIX #3: guard faltante añadido
+
     if(canasta_anotada) return;
 
     if(balon->portador == nullptr &&
@@ -599,9 +600,6 @@ void Level_1::lanzar_balon_jugador(float fuerza)
 }
 
 
-// FIX #1: destructor ya NO hace delete — finalizar() es el responsable.
-// Si finalizar() fue llamado, los punteros ya son nullptr y delete sería no-op,
-// pero lo más limpio es no duplicar la lógica de liberación.
 Level_1 :: ~Level_1(){
 
     delete enemigo;

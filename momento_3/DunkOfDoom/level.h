@@ -11,6 +11,10 @@ class Ball;
 
 class player;
 
+
+// -----------------
+//  CLASE ABSTRACTA
+// -----------------
 class Level
 {
 public:

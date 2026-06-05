@@ -13,15 +13,8 @@ enum class modoBall : unsigned char
 
 enum class ComportamientoColision : unsigned char
 {
-<<<<<<< HEAD
     Rebote,
     Roto
-=======
-
-    Rebote, //rebota y pierde energia hasta romperse
-    Roto    //se rompe al primer impacto con el borde
-
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
 };
 
 enum class sprite_ball : unsigned char
@@ -66,36 +59,9 @@ public:
     void verificar_colision_paredes(float ancho, float alto);
     void verificar_colision_charater(character* c);
 
-<<<<<<< HEAD
     bool Activa() const { return activa; }
     bool tiene_portador() const { return portador != nullptr; }
     sprite_ball get_sprite() const { return sprite_actual; }
-=======
-    // getters
-    bool Activa() const
-    {
-        return activa;
-    }
-
-    bool tiene_portador() const
-    {
-        return portador != nullptr;
-    }
-
-    sprite_ball get_sprite() const
-    {
-        return sprite_actual;
-    }
-
-    // constantes fisicas igual que en el la tierra
-    static constexpr float Gravedad = config::FISICAS::GRAVEDAD;
-    static constexpr float Coef_rebote = config::FISICAS::COEF_REBOTE;
-    static constexpr float Perdida_energia = 0.65f;
-    static constexpr float Vel_minima = config::FISICAS::VEL_MINIMA;
-    static constexpr float Radio_colision = 60.0f;
-    static constexpr float OFFSET_X = 20.0f;
-    static constexpr float OFFSET_Y = 10.0f;
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
 
     static constexpr float Gravedad     = config::FISICAS::GRAVEDAD;
     static constexpr float Coef_rebote  = config::FISICAS::COEF_REBOTE;

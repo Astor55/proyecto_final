@@ -1,13 +1,10 @@
 #ifndef ENEMY_H
 #define ENEMY_H
+
 #include "character.h"
 
 class Ball;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
 enum Decision : unsigned char
 {
     IDLE,
@@ -25,70 +22,49 @@ private:
     bool balon_en_mano;
     bool balon_con_jugador;
     Decision decision;
+
     const float rango_maximo = 90.0f;
     const float rango_minimo = 30.0f;
+
     bool acaba_de_lanzar = false;
     float timer_acaba_lanzar = 0.0f;
     float cooldown_robo = 0.0f;
-    static constexpr float DELAY_ROBO = 1.5f; // segundos entre robos
     float distancia_a_canasta = 0.0f;
 
-
-    // level_1
-    const float rango_maximo     = 90.0f;
-    const float rango_minimo     = 30.0f;
-    bool  acaba_de_lanzar        = false;
-    float timer_acaba_lanzar     = 0.0f;
-    float cooldown_robo          = 0.0f;
-    float distancia_a_canasta    = 0.0f;
-    static constexpr float DELAY_ROBO = 1.5f;
+    static constexpr float DELAY_ROBO = 1.5f; // segundos entre robos
 
 public:
-    Enemy(float _x, float _y, float _velocidad, float _vida, float _fuerza, float _rango_ataque, bool _en_suelo)
-        : character(_x, _y, _velocidad, _vida, _fuerza, _rango_ataque, _en_suelo),
-        distancia_al_jugador(0), balon_en_mano(false), balon_con_jugador(false), decision(IDLE)
+    Enemy(float _x, float _y, float _velocidad, float _vida,
+          float _fuerza, float _rango_ataque, bool _en_suelo)
+        : character(_x, _y, _velocidad, _vida, _fuerza,
+                    _rango_ataque, _en_suelo),
+        distancia_al_jugador(0),
+        balon_en_mano(false),
+        balon_con_jugador(false),
+        decision(IDLE)
     {}
 
-<<<<<<< HEAD
     void moverse(float dx, float dy) override;
     void atacar(character& objetivo, Ball& balon) override {}
 
     // level_1
     void quitar(character& objetivo, Ball& balon);
     void lanzar_balon(Ball& balon, float canasta_x, float canasta_y);
-    void percepcion(character& jugador, Ball& balon, float dt, float canasta_x, float canasta_y);
+    void percepcion(character& jugador, Ball& balon, float dt,
+                    float canasta_x, float canasta_y);
     void razonamiento();
-    void accion(character& jugador, Ball& balon, float canasta_x, float canasta_y, float timer_inv);
-    void aprendizaje(unsigned short puntos_player, unsigned short puntos_enemy);
-=======
-        Enemy(float _x, float _y, float _velocidad, float _vida, float _fuerza, float _rango_ataque, bool _en_suelo)
-        : character(_x, _y, _velocidad, _vida, _fuerza, _rango_ataque, _en_suelo),distancia_al_jugador(0),
-            balon_en_mano(false), balon_con_jugador(false), decision(IDLE)
-
-        {}
-
-        void moverse(float dx, float dy) override;
-        void quitar(character& objetivo, Ball& balon);
-        void lanzar_balon(Ball& balon, float canasta_x, float canasta_y);
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
+    void accion(character& jugador, Ball& balon,
+                float canasta_x, float canasta_y, float timer_inv);
+    void aprendizaje(unsigned short puntos_player,
+                     unsigned short puntos_enemy);
 
     // level_2
     void percepcion(character& jugador, Ball& balon);
-    void accion(character& jugador, Ball& balon, float canasta_x, float canasta_y);
+    void accion(character& jugador, Ball& balon,
+                float canasta_x, float canasta_y);
     void aprendizaje();
 
-<<<<<<< HEAD
     ~Enemy() override = default;
-=======
-        // Ciclo del agente inteligente
-        void percepcion(character& jugador, Ball& balon, float dt, float canasta_x, float canasta_y); // Lee el estado del entorno (posición del jugador, balón, etc.)
-        void razonamiento(); // Decide qué acción tomar según lo percibido
-        void accion(character& jugador, Ball& balon, float canasta_x, float canasta_y, float timer_inv); // Ejecuta la decisión (moverse, lanzar, arrebatar)
-        void aprendizaje(unsigned short puntos_player, unsigned short puntos_enemy); // Ajusta comportamiento según resultados
-
-        ~Enemy() override = default;
-
->>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
 };
 
 #endif // ENEMY_H

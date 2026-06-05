@@ -20,9 +20,7 @@ class PowerUp: public Obstacle
 
 public:
 
-    //------------------------
     //constructor y destructor
-    //------------------------
     PowerUp(float x, float y, float vida_jugador,
             float vida_max_jugador);
 

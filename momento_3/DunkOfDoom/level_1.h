@@ -35,13 +35,12 @@ private:
     float canasta_player_x;
     float canasta_player_y;
     float timer_invulnerabilidad = 0.0f; // Invulnerabilidad del balon cuando se lanza (Esta en el suelo)
-    // FIX #7: eliminado timer_invulnerabilidad_enemigo (nunca se usaba)
     float timer_texto_canasta = 0.0f;
     float timer_frame_jugador;
     float timer_frame_enemigo;
     float timer_canasta_anotada = 0.0f;
     float timer_countdown = 0.0f;
-    float timer_lanzando = 0.0f;  // FIX #6: controla la duración de la animación LANZANDO
+    float timer_lanzando = 0.0f;  // controla la duración de la animación LANZANDO
 
     bool balon_en_aire = false;
     bool canasta_anotada = false;
@@ -79,7 +78,7 @@ private:
     EstadoAnimacion estado_enemigo;
     EstadoAnimacion estado_anterior_jugador;
 
-    // Constantes del nuevo sheet
+    // Constantes del sheet
     static constexpr int FW = 200;
     static constexpr int FILA_COL_X[8] = {0, 200, 401, 601, 802, 1002, 1203, 1403};
     static constexpr int FILA_Y[5] = {32, 196, 392, 596, 784};
