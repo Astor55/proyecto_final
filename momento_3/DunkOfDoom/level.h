@@ -5,6 +5,10 @@
 #include <QMediaPlayer>
 #include <QAudioOutput>
 
+class character;
+
+class Ball;
+
 class player;
 
 class Level
@@ -23,6 +27,12 @@ public:
     virtual void inicializacion(player* p, QGraphicsScene* scena) = 0;
     virtual void actualizar(float dt) = 0;
     virtual void finalizar() = 0;
+
+    virtual bool jugador_sobrevivio() const { return false; }
+    virtual bool getEnCountdown() const { return false; }
+    virtual void lanzar_balon_jugador(float fuerza) {}
+    virtual character* getEnemigo() const { return nullptr; }
+    virtual Ball* getBalon() const { return nullptr; }
 
     //Getters
     bool esta_terminado() const { return terminado; }

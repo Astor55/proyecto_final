@@ -12,19 +12,6 @@ void Enemy :: moverse(float dx ,float dy){
     y += dy * velocidad;
 }
 
-void Enemy :: atacar(character& objetivo, Ball& balon){
-
-    float dx = objetivo.get_x() - x;
-
-    float dy = objetivo.get_y() - y;
-
-    float distancia = sqrt((dx*dx) + (dy*dy));
-
-    if(distancia <= rango_ataque && balon.portador == &objetivo){
-
-        balon.recoger(this);
-    }
-}
 
 void Enemy :: percepcion(character& jugador, Ball& balon){
 
