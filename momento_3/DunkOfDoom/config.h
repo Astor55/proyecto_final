@@ -55,7 +55,7 @@ namespace config
         static constexpr float DURACION           = 90.0f;
         static constexpr int   PUNTOS_POR_CANASTA = 2;
         static constexpr float ALTO_SUELO         = 650.0f;
-        static constexpr float ALTO_CESTA         = 150.0f;
+        static constexpr float ALTO_CESTA         = 282.0f;
         static constexpr float RADIO_CESTA        = 40.0f;
 
     }
@@ -85,6 +85,7 @@ namespace config
 
         static constexpr float GRAVEDAD           = 980.0f;
         static constexpr float COEF_REBOTE        = 0.65f;
+        static constexpr float COEF_REBOTE2       = 0.35;
         static constexpr float FRICCION           = 0.98f;
         static constexpr float VEL_MINIMA         = 20.0f;
 

@@ -117,12 +117,13 @@ void Level_2::inicializacion(player* p, QGraphicsScene* escena)
     jugador->modificar_vida(vida_jugador - jugador->getvida());
 
     //crear boss centrado arriba (fijo)
-    jefe = new Boss(ANCHO_PLATAFORMA / 2.0F, // x centrado
-                    150.0f,  //Y arriba
-                    300.0f, //vida
-                    100.0f, //fuerza
-                    500.0f, //rango ataque
-                    false,  //en_suelo
+    jefe = new Boss(ANCHO_PLATAFORMA / 2.0F,
+                    150.0f,   // y
+                    100.0f,   // velocidad
+                    300.0f,   // vida
+                    100.0f,   // fuerza
+                    500.0f,   // rango ataque
+                    false,    // en_suelo
                     vel_ataque_boss);   //velociadd_ataque
 
     sprite_boss = new BossSprites(escena, 0.4f);
@@ -221,7 +222,7 @@ void Level_2::actualizar(float dt)
 
         Ball* proyectil = new Ball(modoBall::projectile, ComportamientoColision::Rebote, 3);
 
-        proyectil->DANIO = daño_proyectil;
+        proyectil->danio = daño_proyectil;
         proyectil->x = jefe->get_x();
         proyectil->y = jefe->get_y();
         jefe->lanzar_proyectil(*proyectil);

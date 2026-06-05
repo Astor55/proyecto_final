@@ -1,63 +1,59 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-// Clase abstracta
 class Ball;
 
 class character
 {
+protected:
+    float x;
+    float y;
+    float velocidad;
+    float vida;
+    float vida_max;
+    float fuerza;
+    float rango_ataque;
+    float dx_actual;
+    float dy_actual;
+    float timer_inmovilizacion = 0.0f;
+    float velocidad_base       = 200.0f;
+    float boost_timer          = 0.0f;
 
-    protected: //Protected para poder ser heredados por sus clases derivadas
+    Ball* balon = nullptr;
 
-        // Atributos
+    bool en_suelo;
+    bool inmovilizado = false;
+    bool flash_verde_activo = false;
 
-        float x;
-        float y;
-        float velocidad;
-        float vida;
-        float fuerza;
-        float rango_ataque; // Se refiere al rango que tiene cada personaje para atacar
-        float dx_actual;
-        float dy_actual;
-        float timer_inmovilizacion = 0.0f;
-        float velocidad_base       = 200.0f;
-        float boost_timer          = 0.0f;
-        float vida_max;
+public:
+    character(float _x, float _y, float _velocidad, float _vida, float _fuerza, float _rango_ataque, bool _en_suelo);
 
-        Ball* balon;
+    virtual void moverse(float dx, float dy) = 0;
+    virtual void atacar(character& objetivo, Ball& bal) {}
 
-        bool en_suelo;
-        bool inmovilizado = false;
-        bool flash_verde_activo = false;
+    void modificar_vida(float cantidad);
 
-    public:
+    virtual ~character() = default;
 
-        character(float _x, float _y, float _vida, float _fuerza,float _rango_ataque, bool _en_suelo);
+    // Getters
+    float get_x() const { return x; }
+    float get_y() const { return y; }
+    float getx() const;
+    float gety() const;
+    float getvelocidad() const;
+    float getvida() const;
+    float getfuerza() const;
+    bool  getensuelo() const;
+    float getdx_actual() const;
+    float getdy_actual() const;
+    float getrango_ataque() const;
+    float get_inmovilizado() const { return inmovilizado; }
 
-        // Metodos
-
-        virtual void moverse(float dx, float dy) = 0; // Especificador para el compilador que obliga a las clases derivadas a implementarlo
-        virtual void atacar(character& objetivo, Ball& balon) = 0;
-
-        void modificar_vida(float cantidad);
-
-        virtual ~character() = default; // Default, le dice al compilador que genere este metodo automaticamente
-
-        // Getters
-        float get_x()const {return x;}
-        float get_y()const {return y;}
-        float getvelocidad() const;
-        float getvida() const;
-        float getfuerza() const;
-        bool getensuelo() const;
-        float getdx_actual() const;
-        float getdy_actual() const;
-        float get_inmovilizado() const { return inmovilizado; }
-
-        //setters
-        void setx(float nx) { x = nx; }
-        void sety(float ny) { y = ny; }
-
+    // Setters
+    void setx(float num);
+    void sety(float num);
+    void setdx(float num);
+    void setdy(float num);
 };
 
 #endif // CHARACTER_H
