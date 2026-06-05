@@ -17,23 +17,26 @@ character::character(float _x, float _y, float _velocidad, float _vida, float _f
 
     en_suelo = _en_suelo;
 
+    velocidad = 200.0f;
+
+    dx_actual = 0.0f;
+
+    dy_actual = 0.0f;
+
+    balon = nullptr;
+
+    vida_max = _vida;
+
 }
 
 void character :: modificar_vida(float cantidad){
 
     vida+= cantidad; // Si cantidad es negativa, disminuye la vida, si es positiva, aumenta
-}
 
+    if(vida < vida_max) vida = vida_max;
 
+    if(vida < 0.0f) vida = 0.0f;
 
-float character :: getx() const{
-
-    return x;
-}
-
-float character :: gety() const{
-
-    return y;
 }
 
 float character :: getvelocidad() const{

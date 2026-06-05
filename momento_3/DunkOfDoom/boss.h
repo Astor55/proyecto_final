@@ -2,7 +2,8 @@
 #define BOSS_H
 
 #include "enemy.h"
-#include "ball.h"
+
+class Ball;
 
 class Boss : public Enemy
 {
@@ -26,7 +27,7 @@ class Boss : public Enemy
         }
 
 
-        void atacar(Ball& balon);
+        void lanzar_proyectil(Ball& balon);
         void calcular_posicion_jugador(character& jugador);
         void calcular_posible_nueva_posicion(character& jugador);
 
