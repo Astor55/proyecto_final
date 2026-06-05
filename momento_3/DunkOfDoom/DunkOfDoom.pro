@@ -12,7 +12,11 @@ SOURCES += \
     hud_sprites.cpp \
     lavasprites.cpp \
     level.cpp \
+<<<<<<< HEAD
     level_2.cpp \
+=======
+    level_1.cpp \
+>>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
     main.cpp \
     mainwindow.cpp \
     ball.cpp \
@@ -35,7 +39,11 @@ HEADERS += \
     hud_sprites.h \
     lavasprites.h \
     level.h \
+<<<<<<< HEAD
     level_2.h \
+=======
+    level_1.h \
+>>>>>>> 1c20730c189bd461ab8b636d73684ffd0512b9ec
     mainwindow.h \
     ball.h \
     character.h \
@@ -75,3 +83,6 @@ win32 {
     export(copyassets.commands)
     QMAKE_EXTRA_TARGETS += first copyassets
 }
+
+RESOURCES += \
+    assets.qrc

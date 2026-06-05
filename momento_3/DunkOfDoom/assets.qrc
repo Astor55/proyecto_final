@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/player/Doom_comportamientos_level1.png</file>
+        <file>assets/enemy/demonio_comportamiento_lvl1.png</file>
+        <file>assets/sprites/level1.doom.png</file>
+        <file>assets/Ball_Doom-removebg-preview.png</file>
+        <file>assets/ball.png</file>
+        <file>assets/sprites_player_nuevo.png</file>
+        <file>assets/music_level1.mp3</file>
+        <file>assets/you_win1.png</file>
+        <file>assets/game_over1.png</file>
+    </qresource>
+</RCC>
