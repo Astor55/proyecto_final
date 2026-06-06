@@ -75,3 +75,5 @@ win32 {
 
 RESOURCES += \
     assets.qrc
+
+RC_ICONS = Logo_DunkOfDoom_icon.ico

@@ -2,6 +2,7 @@
 #include "config.h"
 #include "level_1.h"
 #include <QApplication>
+#include <QWidget>
 
 Juego::Juego(QGraphicsScene* escena, float volumen)
     : escena(escena), volumen(volumen)
@@ -161,7 +162,15 @@ void Juego::confirmar()
     case EstadoMenu::PRINCIPAL:
         if(opcion_seleccionada == 0)      mostrar_seleccion_nivel();
         else if(opcion_seleccionada == 1) mostrar_controles();
-        else if(opcion_seleccionada == 2) QApplication::quit(); // cerrar
+        else if(opcion_seleccionada == 2)
+        {
+
+            if(QWidget* v_principal = QApplication::activeWindow())
+            {
+                v_principal->close();   // cerrar
+            }
+
+        }
         break;
 
     case EstadoMenu::SELECCION_NIVEL:
