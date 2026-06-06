@@ -320,8 +320,6 @@ void Level_1 :: inicializacion(player* p, QGraphicsScene* escena){
     canasta_enemy_x  = 1132;
     canasta_enemy_y  = 282;
 
-    qDebug() << "Canasta enemiga inicializada en : " << float(canasta_enemy_x) << float(canasta_enemy_y);
-
     jugador->setx(440.0f);
     jugador->sety(500.0f);
 

@@ -6,6 +6,9 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+
+    setWindowIcon(QIcon(config::Assets::ICON));
+
     ui->setupUi(this);
 
     escena = new QGraphicsScene(this);
@@ -30,16 +33,21 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+
+    if(nivel) { delete nivel; nivel = nullptr; }
+    if(jugador) { delete jugador; jugador = nullptr; }
+
+    juego->transferir_ownership(); // asegura que juego no haga doble delete
     delete juego;
-    delete nivel;
-    delete jugador;
     delete ui;
+
     if(musica_final)
     {
         musica_final->stop();
         delete musica_final;
         musica_final = nullptr;
     }
+
     if(audio_final)
     {
         delete audio_final;
@@ -209,15 +217,19 @@ void MainWindow::ir_al_menu()
 {
     ocultar_pausa();
     limpiar_pantalla_final();
+
     if(musica_final) musica_final->stop();
 
-    escena->clear();
     delete nivel;   nivel   = nullptr;
     delete jugador; jugador = nullptr;
 
+    escena->clear();
+
     juego->mostrar_pantalla_principal();
+
     estado_app   = EstadoApp::MENU;
     estado_juego = EstadoJuego::JUGANDO;
+
     esperando_final = false;
     timer->start(1000 / 60);
 }
@@ -259,6 +271,7 @@ void MainWindow::mostrar_pantalla_final(bool gano)
     txt_menu->setZValue(11);
     txt_menu->setPos(668, 593);
 }
+
 
 void MainWindow::mostrar_pausa()
 {

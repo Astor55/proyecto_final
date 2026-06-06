@@ -59,7 +59,6 @@ public:
     void entrar_submenu();
     void salir_submenu();
     void detener_musica_menu();
-
     void transferir_ownership() { nivel = nullptr; jugador = nullptr; }
 
 private:

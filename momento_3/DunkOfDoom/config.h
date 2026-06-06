@@ -69,6 +69,7 @@ namespace Assets
 {
 static constexpr const char* FONDO_MENU      = "assets/sprites/ui/fondo_logo.png";
 static constexpr const char* LOGO            = "assets/sprites/ui/Logo_DunkOfDoom.png";
+static constexpr const char* ICON            = "assets/sprites/ui/Logo_DunkOfDoom_icon.ico";
 static constexpr const char* MUSICA_MENU     = "assets/sounds/music/dunkofdoom_menu.mp3";
 static constexpr const char* BALL_SHEET      = "assets/sprites/Ball_Doom.png";
 static constexpr const char* SFX_BOUNCE      = "assets/sounds/sfx/bounce.wav";
