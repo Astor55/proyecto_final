@@ -31,7 +31,7 @@ private:
     float cooldown_robo = 0.0f;
     float distancia_a_canasta = 0.0f;
 
-    static constexpr float DELAY_ROBO = 1.5f; // segundos entre robos
+    static constexpr float DELAY_ROBO = 1.6f; // segundos entre robos
 
 public:
     Enemy(float _x, float _y, float _velocidad, float _vida,
